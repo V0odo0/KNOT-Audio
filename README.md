@@ -1,8 +1,8 @@
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/V0odo0/Knot-localization?label=release)
-![Unity version](https://img.shields.io/badge/Unity-2019.3%2B-blue)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/V0odo0/Knot-Audio?label=release)
+![Unity version](https://img.shields.io/badge/Unity-2020.3%2B-blue)
 ![Dependencies](https://img.shields.io/badge/dependencies-none-green)
 ![Platforms](https://img.shields.io/badge/platforms-all-blue)
-![GitHub](https://img.shields.io/github/license/V0odo0/KNOT-Localization?label=license)
+![GitHub](https://img.shields.io/github/license/V0odo0/KNOT-Audio?label=license)
 
 ![as_icon](https://github.com/V0odo0/KNOT-Audio/blob/main/Editor/Resources/KnotAudio_icon.png)
 
@@ -27,5 +27,5 @@ https://github.com/V0odo0/KNOT-Audio.git
 Add dependency to your /YourProjectName/Packages/manifest.json
 
 ```
-"com.knot.localization": "https://github.com/V0odo0/KNOT-Audio.git",
+"com.knot.audio": "https://github.com/V0odo0/KNOT-Audio.git",
 ```
