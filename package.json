@@ -1,0 +1,22 @@
+{
+  "name": "com.knot.audio",
+  "version": "0.1.0",
+  "author": "V0odo0",
+  "displayName": "KNOT Audio",
+  "unity": "2019.3",
+  "description": "Lightweight, scalable and extensible audio manager for Unity.",
+  "keywords": [
+    "audio",
+    "sound"
+	],
+  "category": "Audio",
+  "documentationUrl": "https://github.com/V0odo0/KNOT-Audio",
+  "changelogUrl": "https://github.com/V0odo0/KNOT-Audio/blob/main/CHANGELOG.md",
+  "samples": [
+        {
+            "displayName": "Demo",
+            "description": "Features overview",
+            "path": "Samples~/Demo"
+        }
+    ]
+}
