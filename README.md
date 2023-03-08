@@ -1,3 +1,5 @@
+# EARLY STAGE OF DEVELOPMENT. DO NOT IMPLEMENT YET!
+
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/V0odo0/Knot-Audio?label=release)
 ![Unity version](https://img.shields.io/badge/Unity-2020.3%2B-blue)
 ![Dependencies](https://img.shields.io/badge/dependencies-none-green)
@@ -5,12 +7,6 @@
 ![GitHub](https://img.shields.io/github/license/V0odo0/KNOT-Audio?label=license)
 
 ![as_icon](https://github.com/V0odo0/KNOT-Audio/blob/main/Editor/Resources/KnotAudio_icon.png)
-
-**[YouTube](https://www.youtube.com/watch?v=vzYPx3FN9Sk) • 
-[WebGL Demo](https://vd3v.com/assets/knot_localization/demo/) •
-[Documentation](https://vd3v.com/assets/knot_localization/docs/articles/quickstart.html) •
-[Changelog](https://github.com/V0odo0/KNOT-Localization/blob/main/CHANGELOG.md)**
-
 
 ## Installation
 
