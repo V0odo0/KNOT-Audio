@@ -19,7 +19,6 @@ namespace Knot.Audio
             return Data == other;
         }
 
-
-        public static implicit operator KnotAudioData(KnotAudioDataAsset d) => d.Data;
+        public static implicit operator KnotAudioData(KnotAudioDataAsset d) => d == null ? null : d.Data;
     }
 }

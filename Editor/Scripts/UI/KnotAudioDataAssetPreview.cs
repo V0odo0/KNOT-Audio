@@ -19,8 +19,6 @@ namespace Knot.Audio.Editor
         {
             if (!(target is KnotAudioDataAsset dataAsset))
                 return;
-
-            r.height = 1;
         }
 
         public override void OnPreviewSettings()
@@ -30,7 +28,7 @@ namespace Knot.Audio.Editor
             if (!(target is KnotAudioDataAsset dataAsset))
                 return;
 
-            EditorGUI.BeginDisabledGroup(dataAsset.Data.Clip == null);
+            EditorGUI.BeginDisabledGroup(dataAsset.Data.AudioClip == null);
             if (GUILayout.Button(EditorGUIUtility.IconContent("d_PlayButton")))
                 PlayClip(dataAsset);
 
@@ -39,10 +37,10 @@ namespace Knot.Audio.Editor
 
         internal static void PlayClip(KnotAudioDataAsset dataAsset)
         {
-            if (dataAsset == null || dataAsset.Data.Clip == null)
+            if (dataAsset == null || dataAsset.Data.AudioClip == null)
                 return;
 
-            KnotEditorUtils.PlayPreviewClip(dataAsset.Data.Clip, 10000);
+            KnotEditorUtils.PlayPreviewClip(dataAsset.Data.AudioClip, 10000);
         }
     }
 }

@@ -96,12 +96,19 @@ namespace Knot.Audio.Editor
         
         internal static Type GetManagedReferenceType(this SerializedProperty property)
         {
-            var parts = property.managedReferenceFullTypename.Split(' ');
-            if (parts.Length == 2)
+            try
             {
-                var assemblyPart = parts[0];
-                var nsClassnamePart = parts[1];
-                return Type.GetType($"{nsClassnamePart}, {assemblyPart}");
+                var parts = property.managedReferenceFullTypename.Split(' ');
+                if (parts.Length == 2)
+                {
+                    var assemblyPart = parts[0];
+                    var nsClassnamePart = parts[1];
+                    return Type.GetType($"{nsClassnamePart}, {assemblyPart}");
+                }
+            }
+            catch
+            {
+                return null;
             }
 
             return null;

@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 namespace Knot.Audio
 {
     [Serializable]
-    [KnotTypeInfo(displayName:"Volume Range")]
+    [KnotTypeInfo(displayName:"Volume Range", Order = -1000)]
     public class KnotVolumeRangeMod : IKnotAudioDataMod
     {
         public float Min
@@ -24,6 +24,26 @@ namespace Knot.Audio
         [SerializeField, Range(0f, 1f)] private float _max = 1f;
 
 
+        public KnotVolumeRangeMod()
+        {
+            _min = _max = 1;
+        }
+
+        public KnotVolumeRangeMod(float min = 1, float max = 1)
+        {
+            _min = min;
+            _max = max;
+        }
+
+
         public float Sample() => Random.Range(Min, Max);
+
+        public void Initialize(KnotAudioSource source)
+        {
+            if (source == null)
+                return;
+
+            source.AudioSource.volume = Sample();
+        }
     }
 }

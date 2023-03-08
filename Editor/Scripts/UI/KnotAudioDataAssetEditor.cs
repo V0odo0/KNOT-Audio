@@ -20,6 +20,11 @@ namespace Knot.Audio.Editor
 
         }
 
+        void OnDisable()
+        {
+            KnotEditorUtils.StopAllPreviewClips();
+        }
+
         public override void OnInspectorGUI()
         {
             if (_dataProperty == null)
