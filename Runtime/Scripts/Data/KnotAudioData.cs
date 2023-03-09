@@ -32,7 +32,14 @@ namespace Knot.Audio
         public KnotAudioData(AudioClip audioClip, params IKnotAudioDataMod[] audioDataMods)
         {
             _audioClip = audioClip;
+            foreach (var m in audioDataMods)
+                Mods.Add(m);
+        }
 
+        public KnotAudioData(AudioClip audioClip, string group, params IKnotAudioDataMod[] audioDataMods)
+        {
+            _audioClip = audioClip;
+            _group = group;
             foreach (var m in audioDataMods)
                 Mods.Add(m);
         }

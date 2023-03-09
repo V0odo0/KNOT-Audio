@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Knot.Audio.Attributes;
@@ -7,9 +7,9 @@ using UnityEngine;
 namespace Knot.Audio
 {
     [AddComponentMenu(KnotAudio.CoreName + "/Audio Player", 1000)]
-    public class KnotAudioPlayer : MonoBehaviour
+    public class KnotAudioPlayer : KnotTrackedMonoBehaviour<KnotAudioPlayer>
     {
-        public virtual IList<IKnotAudioDataProvider> AudioDataProviders
+        public virtual List<IKnotAudioDataProvider> AudioDataProviders
         {
             get => _audioDataProviders ?? (_audioDataProviders = new List<IKnotAudioDataProvider>());
             set
@@ -22,6 +22,10 @@ namespace Knot.Audio
         [SerializeReference, KnotTypePicker(typeof(IKnotAudioDataProvider))]
         private List<IKnotAudioDataProvider> _audioDataProviders;
 
+        public virtual List<IKnotAudioSourceMod> Mods => _mods ?? (_mods = new List<IKnotAudioSourceMod>());
+        [SerializeReference, KnotTypePicker(typeof(IKnotAudioSourceMod), false)]
+        private List<IKnotAudioSourceMod> _mods;
+
         public virtual bool PlayOnAwake
         {
             get => _playOnAwake;
@@ -29,16 +33,21 @@ namespace Knot.Audio
         }
         [SerializeField] private bool _playOnAwake;
 
+        [NonSerialized] private KnotSetParentMod _setParentMod;
+        [NonSerialized] private List<IKnotAudioMod> _audioSourceMods;
 
-        protected virtual void Awake()
+
+        protected override void Awake()
         {
+            base.Awake();
+
             if (PlayOnAwake)
                 Play();
         }
 
-        protected virtual void OnEnable()
+        protected override void OnEnable()
         {
-
+            base.OnEnable();
         }
 
         protected virtual void Reset()
@@ -49,14 +58,21 @@ namespace Knot.Audio
 
         public virtual void Play()
         {
-            if (AudioDataProviders.Count > 0)
-                KnotAudio.Play(AudioDataProviders[0]);
+            Play(0);
         }
 
         public virtual void Play(int id)
         {
-            if (AudioDataProviders.Count >= id - 1)
-                KnotAudio.Play(AudioDataProviders[id]);
+            if (AudioDataProviders.Count == 0 || id < 0 || id >= AudioDataProviders.Count)
+                return;
+
+            _setParentMod ??= new KnotSetParentMod(transform);
+            _audioSourceMods ??= new List<IKnotAudioMod>();
+            _audioSourceMods.Clear();
+            _audioSourceMods.Add(_setParentMod);
+            _audioSourceMods.AddRange(Mods);
+
+            KnotAudio.PlayOnce(AudioDataProviders[id], _audioSourceMods.ToArray());
         }
     }
 }

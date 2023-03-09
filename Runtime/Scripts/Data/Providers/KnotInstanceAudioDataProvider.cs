@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Knot.Audio
 {
     [Serializable]
-    [KnotTypeInfo(displayName:"Instance")]
+    [KnotTypeInfo(displayName:"Instance", order:-1000)]
     public class KnotInstanceAudioDataProvider : IKnotAudioDataProvider
     {
         public IKnotAudioData AudioData => _audioData ?? (_audioData = new KnotAudioData());

@@ -115,19 +115,19 @@ namespace Knot.Audio
 
 
 
-        public static KnotAudioSource Play(IKnotAudioDataProvider provider, params IKnotAudioMod[] mods)
+        public static KnotAudioSource PlayOnce(IKnotAudioDataProvider provider, params IKnotAudioMod[] mods)
         {
             if (provider == null)
                 return null;
 
-            return Play(provider.AudioData);
+            return PlayOnce(provider.AudioData, mods);
         }
 
-        public static KnotAudioSource Play(IKnotAudioData data, params IKnotAudioMod[] mods) =>
-            Manager == null ? null : Manager.Play(data, mods);
+        public static KnotAudioSource PlayOnce(IKnotAudioData data, params IKnotAudioMod[] mods) =>
+            Manager == null ? null : Manager.PlayOnce(data, mods);
 
-        public static KnotAudioSource Play(AudioClip clip, params IKnotAudioMod[] mods) =>
-            Manager == null ? null : Manager.Play(clip, mods);
+        public static KnotAudioSource PlayOnce(AudioClip clip, params IKnotAudioMod[] mods) =>
+            Manager == null ? null : Manager.PlayOnce(clip, mods);
 
         
         internal class KnotAudioManager : MonoBehaviour
@@ -144,6 +144,7 @@ namespace Knot.Audio
             KnotAudioSource InstantiateAudioSource()
             {
                 var audioSource = new GameObject(nameof(KnotAudioSource)).AddComponent<KnotAudioSource>();
+                audioSource.transform.SetParent(transform);
 
                 return audioSource;
             }
@@ -157,28 +158,20 @@ namespace Knot.Audio
                 }
             }
 
-            public KnotAudioSource Play(IKnotAudioData data, params IKnotAudioMod[] mods)
+            public KnotAudioSource PlayOnce(IKnotAudioData data, params IKnotAudioMod[] mods)
             {
                 if (data == null || data.AudioClip == null)
                     return null;
 
-                var audioSource = InstantiateAudioSource();
-                audioSource.Initialize(data, mods);
-                audioSource.Play();
-
-                return audioSource;
+                return InstantiateAudioSource().Initialize(data, mods).PlayOnce();
             }
 
-            public KnotAudioSource Play(AudioClip clip, params IKnotAudioMod[] mods)
+            public KnotAudioSource PlayOnce(AudioClip clip, params IKnotAudioMod[] mods)
             {
                 if (clip == null)
                     return null;
 
-                var audioSource = InstantiateAudioSource();
-                audioSource.Initialize(new KnotAudioData(clip), mods);
-                audioSource.Play();
-
-                return audioSource;
+                return InstantiateAudioSource().Initialize(new KnotAudioData(clip), mods).PlayOnce();
             }
         }
     }

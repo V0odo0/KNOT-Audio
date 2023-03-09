@@ -26,8 +26,8 @@ namespace Knot.Audio
 
         public void Initialize(KnotAudioSource source)
         {
-            if (Parent != null)
-                source.transform.SetParent(Parent);
+            source.transform.SetParent(Parent);
+            source.transform.localPosition = Vector3.zero;
         }
     }
 }

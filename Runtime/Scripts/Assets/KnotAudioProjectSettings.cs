@@ -21,7 +21,7 @@ namespace Knot.Audio
         {
             var instance = CreateInstance<KnotAudioProjectSettings>();
 
-            var uiAudioGroup = new KnotAudioGroup("UI", new KnotSpatialBlendMod(0), new KnotIgnoreListenerPauseMod());
+            var uiAudioGroup = new KnotAudioGroup("UI", new KnotSpatialBlendMod(0), new KnotAudioListenerConfigMod(true, false));
             instance._audioGroups = new List<KnotAudioGroup>(new[] { uiAudioGroup });
 
             return instance;

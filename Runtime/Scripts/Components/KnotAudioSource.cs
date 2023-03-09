@@ -1,5 +1,5 @@
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Knot.Audio
@@ -13,36 +13,79 @@ namespace Knot.Audio
             gameObject.AddComponent<AudioSource>();
         private AudioSource _audioSource;
 
-        public float BaseVolume { get; set; } = 1f;
-        public float BasePitch { get; set; } = 1f;
-
-        [NonSerialized]
-        protected IKnotAudioData _audioData;
-
-
-        public virtual void Initialize(IKnotAudioData audioData, params IKnotAudioMod[] mods)
+        public float PlayTimeNormalized
         {
-            if (audioData == null || audioData.AudioClip == null)
-                return;
+            get
+            {
+                if (AudioSource.clip == null)
+                    return 0;
 
-            _audioData = audioData;
-            gameObject.name = audioData.AudioClip.name;
-            AudioSource.clip = audioData.AudioClip;
+                return Mathf.Clamp01(AudioSource.time / AudioSource.clip.length);
+            }
+        }
+        public float TrimStart { get; set; } = 0f;
+        public float TrimEnd { get; set; } = float.MaxValue;
 
-            if (!string.IsNullOrEmpty(audioData.Group) && KnotAudio.AudioGroups.ContainsKey(audioData.Group))
-                foreach (var mod in KnotAudio.AudioGroups[audioData.Group].Mods)
-                    mod?.Initialize(this);
 
-            foreach (var mod in audioData.GetAllMods())
-                mod?.Initialize(this);
+        protected IKnotAudioData AudioData => _audioData;
+        [NonSerialized] private IKnotAudioData _audioData;
+        [NonSerialized] private List<IKnotAudioMod> _allModsChain;
 
-            foreach (var mod in mods)
-                mod?.Initialize(this);
+        private bool _destroyOnFinishPlaying;
+
+
+        protected virtual void Update()
+        {
+            if (_destroyOnFinishPlaying && !AudioSource.loop)
+            {
+                if (!AudioSource.isPlaying || AudioSource.time >= TrimEnd)
+                    Destroy(gameObject);
+            }
         }
 
-        public virtual void Play()
-        {
 
+        public virtual KnotAudioSource Initialize(IKnotAudioData audioData, params IKnotAudioMod[] mods)
+        {
+            if (audioData == null || audioData.AudioClip == null)
+                return this;
+
+            _audioData = audioData;
+            AudioSource.clip = audioData.AudioClip;
+            
+            if (_allModsChain == null)
+                _allModsChain = new List<IKnotAudioMod>();
+            else _allModsChain.Clear();
+
+            if (!string.IsNullOrEmpty(audioData.Group) && KnotAudio.AudioGroups.ContainsKey(audioData.Group))
+                _allModsChain.AddRange(KnotAudio.AudioGroups[audioData.Group].Mods);
+            _allModsChain.AddRange(audioData.GetAllMods());
+            _allModsChain.AddRange(mods);
+            
+            foreach (var mod in _allModsChain)
+                mod?.Initialize(this);
+
+            UpdateAudioSourceName();
+
+            return this;
+        }
+
+        public virtual KnotAudioSource PlayOnce()
+        {
+            if (AudioSource.clip != null && TrimStart < AudioSource.clip.length)
+            {
+                if (!Mathf.Approximately(TrimStart, 0))
+                    AudioSource.time = TrimStart;
+
+                AudioSource.Play();
+            }
+
+            _destroyOnFinishPlaying = true;
+            return this;
+        }
+
+        internal void UpdateAudioSourceName()
+        {
+            gameObject.name = $"{KnotAudio.CoreName}: {(AudioSource.clip == null ? "Empty" : AudioSource.clip.name)}";
         }
     }
 }
