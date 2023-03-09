@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace Knot.Audio.Editor
 {
-    [CustomEditor(typeof(KnotAudioDataAsset))]
+    [CustomEditor(typeof(KnotAudioDataAsset), true)]
     [CanEditMultipleObjects]
     public class KnotAudioDataAssetEditor : UnityEditor.Editor
     {
@@ -27,6 +27,9 @@ namespace Knot.Audio.Editor
 
         public override void OnInspectorGUI()
         {
+            base.OnInspectorGUI();
+
+            /*
             if (_dataProperty == null)
             {
                 base.OnInspectorGUI();
@@ -35,10 +38,10 @@ namespace Knot.Audio.Editor
 
             serializedObject.Update();
 
-            EditorGUILayout.PropertyField(_dataProperty.FindPropertyRelative("_clip"), true);
+            EditorGUILayout.PropertyField(_dataProperty.FindPropertyRelative("_audioClip"), true);
             EditorGUILayout.PropertyField(_dataProperty.FindPropertyRelative("_mods"), true);
 
-            serializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();*/
         }
     }
 }

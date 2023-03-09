@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Knot.Audio
 {
     [Serializable]
-    [KnotTypeInfo(displayName:"Random Audio AudioClip", Order = - 980)]
+    [KnotTypeInfo(displayName:"Random AudioClip", Order = - 980)]
     public class KnotRandomAudioClipMod : IKnotAudioDataMod
     {
         public IList<AudioClip> AudioClips => _audioClips ?? (_audioClips = new List<AudioClip>());

@@ -7,7 +7,7 @@ namespace Knot.Audio
     public interface IKnotAudioData
     {
         AudioClip AudioClip { get; }
-        
+        string Group { get; }
 
         IEnumerable<IKnotAudioDataMod> GetAllMods();
     }

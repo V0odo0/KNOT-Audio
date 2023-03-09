@@ -16,6 +16,13 @@ namespace Knot.Audio
         }
         [SerializeField] private AudioClip _audioClip;
 
+        public string Group
+        {
+            get => _group;
+            set => _group = value;
+        }
+        [SerializeField, KnotAudioGroupNamePicker] private string _group;
+
         public IList<IKnotAudioDataMod> Mods => _mods ?? (_mods = new List<IKnotAudioDataMod>());
         [SerializeReference, KnotTypePicker(typeof(IKnotAudioDataMod), false)] private List<IKnotAudioDataMod> _mods;
 

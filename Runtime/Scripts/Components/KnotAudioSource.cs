@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Knot.Audio.Attributes;
+using System.Collections.ObjectModel;
 using UnityEngine;
 
 namespace Knot.Audio
@@ -28,10 +26,13 @@ namespace Knot.Audio
                 return;
 
             _audioData = audioData;
-
             gameObject.name = audioData.AudioClip.name;
-
             AudioSource.clip = audioData.AudioClip;
+
+            if (!string.IsNullOrEmpty(audioData.Group) && KnotAudio.AudioGroups.ContainsKey(audioData.Group))
+                foreach (var mod in KnotAudio.AudioGroups[audioData.Group].Mods)
+                    mod?.Initialize(this);
+
             foreach (var mod in audioData.GetAllMods())
                 mod?.Initialize(this);
 
