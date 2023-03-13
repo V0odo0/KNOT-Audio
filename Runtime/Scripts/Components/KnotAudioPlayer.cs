@@ -22,9 +22,9 @@ namespace Knot.Audio
         [SerializeReference, KnotTypePicker(typeof(IKnotAudioDataProvider))]
         private List<IKnotAudioDataProvider> _audioDataProviders;
 
-        public virtual List<IKnotAudioSourceMod> Mods => _mods ?? (_mods = new List<IKnotAudioSourceMod>());
+        public virtual List<IKnotAudioSourceMod> AudioSourceMods => _audioSourceMods ?? (_audioSourceMods = new List<IKnotAudioSourceMod>());
         [SerializeReference, KnotTypePicker(typeof(IKnotAudioSourceMod), false)]
-        private List<IKnotAudioSourceMod> _mods;
+        private List<IKnotAudioSourceMod> _audioSourceMods;
 
         public virtual bool PlayOnAwake
         {
@@ -33,8 +33,12 @@ namespace Knot.Audio
         }
         [SerializeField] private bool _playOnAwake;
 
-        [NonSerialized] private KnotSetParentMod _setParentMod;
-        [NonSerialized] private List<IKnotAudioMod> _audioSourceMods;
+        public virtual bool Loop
+        {
+            get => _loop;
+            set => _loop = value;
+        }
+        [SerializeField] private bool _loop;
 
 
         protected override void Awake()
@@ -66,13 +70,9 @@ namespace Knot.Audio
             if (AudioDataProviders.Count == 0 || id < 0 || id >= AudioDataProviders.Count)
                 return;
 
-            _setParentMod ??= new KnotSetParentMod(transform);
-            _audioSourceMods ??= new List<IKnotAudioMod>();
-            _audioSourceMods.Clear();
-            _audioSourceMods.Add(_setParentMod);
-            _audioSourceMods.AddRange(Mods);
-
-            KnotAudio.PlayOnce(AudioDataProviders[id], _audioSourceMods.ToArray());
+            if (Loop)
+                AudioDataProviders[id].PlayLoop(AudioSourceMods.ToArray());
+            else AudioDataProviders[id].PlayOnce(AudioSourceMods.ToArray());
         }
     }
 }

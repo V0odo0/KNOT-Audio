@@ -6,7 +6,7 @@ namespace Knot.Audio
 {
     [Serializable]
     [KnotTypeInfo("Audio Listener Config")]
-    public class KnotAudioListenerConfigMod : IKnotAudioDataMod
+    public class KnotAudioListenerConfigMod : IKnotAudioDataMod, IKnotAudioGroupMod
     {
         public bool IgnoreListenerPause
         {
@@ -32,10 +32,10 @@ namespace Knot.Audio
         }
 
 
-        public void Initialize(KnotAudioSource source)
+        public void Initialize(KnotNativeAudioSourceController sourceController)
         {
-            source.AudioSource.ignoreListenerPause = IgnoreListenerPause;
-            source.AudioSource.ignoreListenerVolume = IgnoreListenerVolume;
+            sourceController.AudioSource.ignoreListenerPause = IgnoreListenerPause;
+            sourceController.AudioSource.ignoreListenerVolume = IgnoreListenerVolume;
         }
     }
 }

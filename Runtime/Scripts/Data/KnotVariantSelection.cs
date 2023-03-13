@@ -1,21 +1,20 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking.Types;
 
 namespace Knot.Audio
 {
-    public abstract class KnotArrayVariantSelection<T> where T : class
+    public abstract class KnotVariantSelection<T> where T : class
     {
         protected static List<T> VariantsTemp { get; } = new List<T>();
 
 
-        public virtual SelectionMethod Method
+        public virtual SelectionMethod Selection
         {
-            get => _method;
-            set => _method = value;
+            get => _selection;
+            set => _selection = value;
         }
-        [SerializeField] protected SelectionMethod _method;
+        [SerializeField] protected SelectionMethod _selection;
 
         public virtual List<T> Variants => _variants ?? (_variants = new List<T>());
         [SerializeField] protected List<T> _variants;
@@ -24,12 +23,12 @@ namespace Knot.Audio
         [NonSerialized] protected T _lastSelectedVariant;
         
 
-        public virtual T SelectNext()
+        public virtual T SelectNext(T fallback = default)
         {
             if (Variants.Count == 0)
-                return default;
+                return fallback;
 
-            switch (Method)
+            switch (Selection)
             {
                 case SelectionMethod.Random:
                     _lastSelectedVariant = Variants[UnityEngine.Random.Range(0, Variants.Count)];

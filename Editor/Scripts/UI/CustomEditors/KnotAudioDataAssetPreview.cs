@@ -28,7 +28,7 @@ namespace Knot.Audio.Editor
             if (!(target is KnotAudioDataAsset dataAsset))
                 return;
 
-            EditorGUI.BeginDisabledGroup(dataAsset.Data.AudioClip == null);
+            EditorGUI.BeginDisabledGroup(dataAsset.AudioData.AudioClip == null);
             if (GUILayout.Button(EditorGUIUtility.IconContent("d_PlayButton")))
                 PlayClip(dataAsset);
 
@@ -37,10 +37,10 @@ namespace Knot.Audio.Editor
 
         internal static void PlayClip(KnotAudioDataAsset dataAsset)
         {
-            if (dataAsset == null || dataAsset.Data.AudioClip == null)
+            if (dataAsset == null || dataAsset.AudioData.AudioClip == null)
                 return;
 
-            KnotEditorUtils.PlayPreviewClip(dataAsset.Data.AudioClip, 10000);
+            KnotEditorUtils.PlayPreviewClip(dataAsset.AudioData.AudioClip, 10000);
         }
     }
 }

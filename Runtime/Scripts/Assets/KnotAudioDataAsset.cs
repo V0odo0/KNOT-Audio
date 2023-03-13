@@ -1,24 +1,22 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Knot.Audio.Attributes;
 using UnityEngine;
 
 namespace Knot.Audio
 {
     [KnotTypeInfo("Audio Data")]
-    [CreateAssetMenu(fileName = "KnotAudioDataAsset", menuName = KnotAudio.CoreName + "/Audio Data", order = -1000)]
+    [CreateAssetMenu(fileName = "KnotAudioData", menuName = KnotAudio.CoreName + "/Audio Data", order = -1000)]
     public class KnotAudioDataAsset : ScriptableObject, IEquatable<KnotAudioData>
     {
-        public KnotAudioData Data => _data;
-        [SerializeField] private KnotAudioData _data;
+        public KnotAudioData AudioData => _audioData;
+        [SerializeField] private KnotAudioData _audioData;
 
 
         public bool Equals(KnotAudioData other)
         {
-            return Data == other;
+            return AudioData == other;
         }
 
-        public static implicit operator KnotAudioData(KnotAudioDataAsset d) => d == null ? null : d.Data;
+        public static implicit operator KnotAudioData(KnotAudioDataAsset d) => d == null ? null : d.AudioData;
     }
 }

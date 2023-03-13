@@ -32,11 +32,11 @@ namespace Knot.Audio
         }
 
 
-        public void Initialize(KnotAudioSource source)
+        public void Initialize(KnotNativeAudioSourceController sourceController)
         {
             if (Space == Space.Self)
-                source.transform.localPosition = Position;
-            else source.transform.position = Position;
+                sourceController.transform.localPosition = Position;
+            else sourceController.transform.position = Position;
         }
     }
 }

@@ -15,13 +15,13 @@ namespace Knot.Audio
         }
         [SerializeField] private string _name = "Default Audio Group";
 
-        public List<IKnotAudioDataMod> Mods => _mods ?? (_mods = new List<IKnotAudioDataMod>());
-        [SerializeReference, KnotTypePicker(typeof(IKnotAudioDataMod), false)] private List<IKnotAudioDataMod> _mods;
+        public List<IKnotAudioGroupMod> Mods => _mods ?? (_mods = new List<IKnotAudioGroupMod>());
+        [SerializeReference, KnotTypePicker(typeof(IKnotAudioGroupMod), false)] private List<IKnotAudioGroupMod> _mods;
 
 
         public KnotAudioGroup() { }
 
-        public KnotAudioGroup(string name, params IKnotAudioDataMod[] mods)
+        public KnotAudioGroup(string name, params IKnotAudioGroupMod[] mods)
         {
             _name = name;
             Mods.AddRange(mods);

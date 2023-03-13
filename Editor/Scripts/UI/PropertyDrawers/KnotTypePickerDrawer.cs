@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Knot.Audio.Attributes;
 using UnityEditor;
@@ -57,13 +58,26 @@ namespace Knot.Audio.Editor
 
             if (selectedTypeInfoId >= 0)
             {
+                EditorGUI.indentLevel++;
                 position.y += popupPos.height + EditorGUIUtility.standardVerticalSpacing;
                 position.height -= popupPos.height;
-
                 EditorGUI.PropertyField(position, property, types[selectedTypeInfoId].Content, true);
+                EditorGUI.indentLevel--;
+
             }
-            
+
             EditorGUI.EndProperty();
+        }
+
+        private static IEnumerable<SerializedProperty> GetDirectChildren(SerializedProperty parent)
+        {
+            int dots = parent.propertyPath.Count(c => c == '.');
+            foreach (SerializedProperty inner in parent)
+            {
+                bool isDirectChild = inner.propertyPath.Count(c => c == '.') == dots + 1;
+                if (isDirectChild)
+                    yield return inner;
+            }
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
@@ -71,7 +85,7 @@ namespace Knot.Audio.Editor
             if (!IsValidProperty(property))
                 return base.GetPropertyHeight(property, label);
             
-            return EditorGUI.GetPropertyHeight(property, true) + (property.GetManagedReferenceType() != null ? EditorGUIUtility.singleLineHeight : 0);
+            return EditorGUI.GetPropertyHeight(property, true) + (property.GetManagedReferenceType() != null ? EditorGUIUtility.singleLineHeight : 0) + 3;
         }
     }
 }

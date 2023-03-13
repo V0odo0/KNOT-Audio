@@ -17,8 +17,7 @@ namespace Knot.Audio.Editor
                 base.OnGUI(position, property, label);
                 return;
             }
-
-
+            
             EditorGUI.BeginProperty(position, label, property);
             EditorGUI.BeginChangeCheck();
             

@@ -18,19 +18,19 @@ namespace Knot.Audio.Editor
 
         public override void OnInspectorGUI()
         {
+            if (_target != null)
+            {
+                EditorGUI.BeginDisabledGroup(!Application.isPlaying || _target.AudioDataProviders.Count == 0);
+                EditorGUILayout.BeginHorizontal();
+
+                if (GUILayout.Button(Application.isPlaying ? "Play Once" : "Play Once [PlayMode only]"))
+                    _target.Play();
+
+                EditorGUILayout.EndHorizontal();
+                EditorGUI.EndDisabledGroup();
+            }
+
             base.OnInspectorGUI();
-
-            if (_target == null)
-                return;
-
-            EditorGUI.BeginDisabledGroup(!Application.isPlaying || _target.AudioDataProviders.Count == 0);
-            EditorGUILayout.BeginHorizontal();
-
-            if (GUILayout.Button(Application.isPlaying ? "Play Once" : "Play Once [PlayMode only]"))
-                _target.Play();
-
-            EditorGUILayout.EndHorizontal();
-            EditorGUI.EndDisabledGroup();
         }
     }
 }

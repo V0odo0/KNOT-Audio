@@ -12,75 +12,75 @@ namespace Knot.Audio
         private static KnotSetPositionMod _setPosition { get; } = new KnotSetPositionMod();
 
 
-        public static KnotAudioSource SetParent(this KnotAudioSource audioSource, Transform parent)
+        public static KnotNativeAudioSourceController SetParent(this KnotNativeAudioSourceController audioSourceController, Transform parent)
         {
-            if (audioSource != null)
+            if (audioSourceController != null)
             {
                 _setParent.Parent = parent;
-                _setParent.Initialize(audioSource);
+                _setParent.Initialize(audioSourceController);
             }
 
-            return audioSource;
+            return audioSourceController;
         }
 
-        public static KnotAudioSource WithPitch(this KnotAudioSource audioSource, float pitch)
+        public static KnotNativeAudioSourceController WithPitch(this KnotNativeAudioSourceController audioSourceController, float pitch)
         {
-            if (audioSource != null)
+            if (audioSourceController != null)
             {
                 _pitchRange.Min = pitch;
                 _pitchRange.Max = pitch;
-                _pitchRange.Initialize(audioSource);
+                _pitchRange.Initialize(audioSourceController);
             }
 
-            return audioSource;
+            return audioSourceController;
         }
 
-        public static KnotAudioSource WithPitchRange(this KnotAudioSource audioSource, float min, float max)
+        public static KnotNativeAudioSourceController WithPitchRange(this KnotNativeAudioSourceController audioSourceController, float min, float max)
         {
-            if (audioSource != null)
+            if (audioSourceController != null)
             {
                 _pitchRange.Min = min;
                 _pitchRange.Max = max;
-                _pitchRange.Initialize(audioSource);
+                _pitchRange.Initialize(audioSourceController);
             }
 
-            return audioSource;
+            return audioSourceController;
         }
 
-        public static KnotAudioSource WithVolume(this KnotAudioSource audioSource, float volume)
+        public static KnotNativeAudioSourceController WithVolume(this KnotNativeAudioSourceController audioSourceController, float volume)
         {
-            if (audioSource != null)
+            if (audioSourceController != null)
             {
                 _volumeRange.Min = volume;
                 _volumeRange.Max = volume;
-                _volumeRange.Initialize(audioSource);
+                _volumeRange.Initialize(audioSourceController);
             }
 
-            return audioSource;
+            return audioSourceController;
         }
 
-        public static KnotAudioSource WithVolumeRange(this KnotAudioSource audioSource, float min, float max)
+        public static KnotNativeAudioSourceController WithVolumeRange(this KnotNativeAudioSourceController audioSourceController, float min, float max)
         {
-            if (audioSource != null)
+            if (audioSourceController != null)
             {
                 _volumeRange.Min = min;
                 _volumeRange.Max = max;
-                _volumeRange.Initialize(audioSource);
+                _volumeRange.Initialize(audioSourceController);
             }
 
-            return audioSource;
+            return audioSourceController;
         }
 
-        public static KnotAudioSource AtPosition(this KnotAudioSource audioSource, Vector3 pos, Space space = Space.Self)
+        public static KnotNativeAudioSourceController AtPosition(this KnotNativeAudioSourceController audioSourceController, Vector3 pos, Space space = Space.Self)
         {
-            if (audioSource != null)
+            if (audioSourceController != null)
             {
                 _setPosition.Position = pos;
                 _setPosition.Space = space;
-                _setPosition.Initialize(audioSource);
+                _setPosition.Initialize(audioSourceController);
             }
 
-            return audioSource;
+            return audioSourceController;
         }
     }
 }

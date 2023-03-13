@@ -7,7 +7,7 @@ namespace Knot.Audio
 {
     [Serializable]
     [KnotTypeInfo(displayName:"Volume Range", Order = -1000)]
-    public class KnotVolumeRangeMod : IKnotAudioDataMod
+    public class KnotVolumeRangeMod : IKnotAudioDataMod, IKnotAudioGroupMod
     {
         public float Min
         {
@@ -38,12 +38,14 @@ namespace Knot.Audio
 
         public float Sample() => Random.Range(Min, Max);
 
-        public void Initialize(KnotAudioSource source)
+        public void Initialize(KnotNativeAudioSourceController sourceController)
         {
-            if (source == null)
+            if (sourceController == null)
                 return;
 
-            source.AudioSource.volume = Sample();
+            var sample = Sample();
+            sourceController.MaxVolume = sample;
+            sourceController.AudioSource.volume = sample;
         }
     }
 }

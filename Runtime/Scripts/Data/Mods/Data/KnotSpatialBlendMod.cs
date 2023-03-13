@@ -6,7 +6,7 @@ namespace Knot.Audio
 {
     [Serializable]
     [KnotTypeInfo("Spatial Blend", Order = -970)]
-    public class KnotSpatialBlendMod : IKnotAudioDataMod
+    public class KnotSpatialBlendMod : IKnotAudioDataMod, IKnotAudioGroupMod
     {
         public float Value
         {
@@ -24,9 +24,9 @@ namespace Knot.Audio
         }
 
 
-        public void Initialize(KnotAudioSource source)
+        public void Initialize(KnotNativeAudioSourceController sourceController)
         {
-            source.AudioSource.spatialBlend = Value;
+            sourceController.AudioSource.spatialBlend = Value;
         }
     }
 }

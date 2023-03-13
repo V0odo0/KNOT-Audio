@@ -24,10 +24,10 @@ namespace Knot.Audio
         }
 
 
-        public void Initialize(KnotAudioSource source)
+        public void Initialize(KnotNativeAudioSourceController sourceController)
         {
-            source.transform.SetParent(Parent);
-            source.transform.localPosition = Vector3.zero;
+            sourceController.transform.SetParent(Parent);
+            sourceController.transform.localPosition = Vector3.zero;
         }
     }
 }

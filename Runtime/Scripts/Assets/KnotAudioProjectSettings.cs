@@ -1,8 +1,8 @@
 ﻿#pragma warning disable CS0649
 
 using System.Collections.Generic;
-using Codice.Client.BaseCommands;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Knot.Audio
 {
@@ -12,8 +12,21 @@ namespace Knot.Audio
         private static KnotAudioProjectSettings _empty;
 
 
+        public AudioMixer DefaultAudioMixer => _defaultAudioMixer;
+        [SerializeField] private AudioMixer _defaultAudioMixer;
+
+        public AudioMixerSnapshot DefaultSnapshot => _defaultSnapshot;
+        [SerializeField] private AudioMixerSnapshot _defaultSnapshot;
+
+        public bool EnableVolumes => _enableVolumes;
+        [SerializeField] private bool _enableVolumes;
+
         public IReadOnlyList<KnotAudioGroup> AudioGroups => _audioGroups ?? (_audioGroups = new List<KnotAudioGroup>());
-        [SerializeField] private List<KnotAudioGroup> _audioGroups;
+        [SerializeField, Space] private List<KnotAudioGroup> _audioGroups;
+
+        public IReadOnlyList<KnotAudioDataLibraryAsset> AudioDataLibraries =>
+            _audioDataLibraries ?? (_audioDataLibraries = new List<KnotAudioDataLibraryAsset>());
+        [SerializeField] private List<KnotAudioDataLibraryAsset> _audioDataLibraries;
 
 
 
@@ -21,7 +34,11 @@ namespace Knot.Audio
         {
             var instance = CreateInstance<KnotAudioProjectSettings>();
 
-            var uiAudioGroup = new KnotAudioGroup("UI", new KnotSpatialBlendMod(0), new KnotAudioListenerConfigMod(true, false));
+            var uiAudioGroup = new KnotAudioGroup("UI", 
+                new KnotDontDestroyOnLoadMod(),
+                new KnotSpatialBlendMod(0),
+                new KnotBypassConfigMod(true, true, true),
+                new KnotAudioListenerConfigMod(true, false));
             instance._audioGroups = new List<KnotAudioGroup>(new[] { uiAudioGroup });
 
             return instance;
@@ -55,6 +72,9 @@ namespace Knot.Audio
         void OnValidate()
         {
             RebuildCachedAudioGroupNames();
+
+            if (KnotAudio.ProjectSettings == this && KnotAudio.Manager != null)
+                KnotAudio.Manager.SetProjectSettings(KnotAudio.ProjectSettings);
         }
 
         static void RebuildCachedAudioGroupNames()

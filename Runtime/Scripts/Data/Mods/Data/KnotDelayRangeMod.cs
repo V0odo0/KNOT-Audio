@@ -5,27 +5,27 @@ using UnityEngine;
 namespace Knot.Audio
 {
     [Serializable]
-    [KnotTypeInfo(displayName: "Pitch Range", Order = -990)]
-    public class KnotPitchRangeMod : IKnotAudioDataMod
+    [KnotTypeInfo(displayName: "Play Delay Range", Order = -950)]
+    public class KnotDelayRangeMod : IKnotAudioDataMod
     {
         public float Min
         {
-            get => Mathf.Clamp(_min, -3, _max);
+            get => Mathf.Clamp(_min, 0, _max);
             set => _min = value;
         }
-        [SerializeField, Range(-3f, 3f)] private float _min = 1f;
+        [SerializeField, Min(0)] private float _min = 0f;
 
         public float Max
         {
-            get => Mathf.Clamp(_max, _min, 3);
+            get => Mathf.Clamp(_max, _min, float.MaxValue);
             set => _max = value;
         }
-        [SerializeField, Range(-3f, 3f)] private float _max = 1f;
+        [SerializeField, Min(0)] private float _max = 1f;
 
 
-        public KnotPitchRangeMod() { }
+        public KnotDelayRangeMod() { }
 
-        public KnotPitchRangeMod(float min = 1, float max = 1)
+        public KnotDelayRangeMod(float min = 1, float max = 1)
         {
             _min = min;
             _max = max;
@@ -39,7 +39,7 @@ namespace Knot.Audio
             if (sourceController == null)
                 return;
 
-            sourceController.AudioSource.pitch = Sample();
+            sourceController.PlayDelay = Sample();
         }
     }
 }

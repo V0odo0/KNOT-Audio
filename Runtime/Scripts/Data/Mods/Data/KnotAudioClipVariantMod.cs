@@ -7,20 +7,20 @@ namespace Knot.Audio
 {
     [Serializable]
     [KnotTypeInfo(displayName:"AudioClip Variant", Order = - 980)]
-    public class KnotAudioClipVariantMod : KnotArrayVariantSelection<AudioClip>, IKnotAudioDataMod
+    public class KnotAudioClipVariantMod : KnotVariantSelection<AudioClip>, IKnotAudioDataMod
     {
         public KnotAudioClipVariantMod() { }
 
         public KnotAudioClipVariantMod(SelectionMethod method, params AudioClip[] audioClips)
         {
-            _method = method;
+            _selection = method;
             _variants = new List<AudioClip>(audioClips);
         }
 
 
-        public void Initialize(KnotAudioSource source)
+        public void Initialize(KnotNativeAudioSourceController sourceController)
         {
-            source.AudioSource.clip = SelectNext();
+            sourceController.AudioSource.clip = SelectNext(sourceController.AudioSource.clip);
         }
     }
 }

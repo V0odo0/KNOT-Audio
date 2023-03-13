@@ -7,7 +7,7 @@ namespace Knot.Audio
 {
     [Serializable]
     [KnotTypeInfo("Audio Mixer Group", -960)]
-    public class KnotAudioMixerGroupMod : IKnotAudioDataMod
+    public class KnotAudioMixerGroupMod : IKnotAudioDataMod, IKnotAudioGroupMod
     {
         public AudioMixerGroup Group
         {
@@ -25,9 +25,9 @@ namespace Knot.Audio
         }
 
 
-        public void Initialize(KnotAudioSource source)
+        public void Initialize(KnotNativeAudioSourceController sourceController)
         {
-            source.AudioSource.outputAudioMixerGroup = _group;
+            sourceController.AudioSource.outputAudioMixerGroup = _group;
         }
     }
 }
