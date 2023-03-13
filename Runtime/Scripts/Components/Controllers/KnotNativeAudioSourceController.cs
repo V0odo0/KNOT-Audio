@@ -105,7 +105,7 @@ namespace Knot.Audio
         }
 
         
-        public override KnotNativeAudioSourceController Initialize(IKnotAudioData audioData, params IKnotAudioMod[] mods)
+        public override KnotAudioSourceController Initialize(IKnotAudioData audioData, params IKnotAudioMod[] mods)
         {
             if (audioData == null || audioData.AudioClip == null)
                 return this;
@@ -132,7 +132,7 @@ namespace Knot.Audio
             return this;
         }
 
-        public override KnotNativeAudioSourceController Play(bool loop)
+        public override KnotAudioSourceController Play(bool loop)
         {
             _destroyOnFinishPlaying = !loop;
             AudioSource.loop = loop;

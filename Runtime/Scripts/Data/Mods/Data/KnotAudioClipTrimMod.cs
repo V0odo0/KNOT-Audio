@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using Knot.Audio.Attributes;
 using UnityEngine;
 
 namespace Knot.Audio
 {
+    [Serializable]
     [KnotTypeInfo("AudioClip Trim")]
     public class KnotAudioClipTrimMod : IKnotAudioDataMod
     {
@@ -47,7 +47,7 @@ namespace Knot.Audio
         }
 
 
-        public void Initialize(KnotNativeAudioSourceController sourceController)
+        public void Initialize(KnotAudioSourceController sourceController)
         {
             switch (TrimMode)
             {

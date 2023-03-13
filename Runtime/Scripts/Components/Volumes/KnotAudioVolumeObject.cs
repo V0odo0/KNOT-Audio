@@ -29,7 +29,7 @@ namespace Knot.Audio
 
         public virtual float GetWeight(Vector3 atPosition)
         {
-            if (!enabled || VolumeColliders.Count == 0)
+            if (!enabled)
                 return 0;
 
             float outDst = float.PositiveInfinity;

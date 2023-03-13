@@ -38,7 +38,7 @@ namespace Knot.Audio
 
         public float Sample() => Random.Range(Min, Max);
 
-        public void Initialize(KnotNativeAudioSourceController sourceController)
+        public void Initialize(KnotAudioSourceController sourceController)
         {
             if (sourceController == null)
                 return;

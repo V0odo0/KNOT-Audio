@@ -24,7 +24,7 @@ namespace Knot.Audio
         }
 
 
-        public void Initialize(KnotNativeAudioSourceController sourceController)
+        public void Initialize(KnotAudioSourceController sourceController)
         {
             sourceController.AudioSource.spatialBlend = Value;
         }

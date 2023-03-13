@@ -25,7 +25,7 @@ namespace Knot.Audio
         }
 
 
-        public void Initialize(KnotNativeAudioSourceController sourceController)
+        public void Initialize(KnotAudioSourceController sourceController)
         {
             var instance = Behaviour?.GetInstance(sourceController);
             if (instance != null)

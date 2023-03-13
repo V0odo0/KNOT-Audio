@@ -179,6 +179,7 @@ namespace Knot.Audio.Editor
         internal static bool IsPersistent(this UnityEngine.Object obj) => EditorUtility.IsPersistent(obj);
 
 
+
         public class TypeInfo
         {
             public readonly Type Type;

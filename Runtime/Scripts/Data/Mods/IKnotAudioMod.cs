@@ -6,6 +6,6 @@ namespace Knot.Audio
 {
     public interface IKnotAudioMod
     {
-        void Initialize(KnotNativeAudioSourceController sourceController);
+        void Initialize(KnotAudioSourceController sourceController);
     }
 }

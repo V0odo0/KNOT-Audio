@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Knot.Audio
 {
-    public abstract class KnotAudioSourceController : KnotTrackedMonoBehaviour<KnotNativeAudioSourceController>
+    public abstract class KnotAudioSourceController : KnotTrackedMonoBehaviour<KnotAudioSourceController>
     {
         public virtual AudioSource AudioSource =>
             (_audioSource ?? (_audioSource = GetComponent<AudioSource>())) ??
@@ -28,9 +28,9 @@ namespace Knot.Audio
                 behaviour?.OnBehaviourStateEvent(behaviourEvent, this);
         }
 
-        public abstract KnotNativeAudioSourceController Initialize(IKnotAudioData audioData,
+        public abstract KnotAudioSourceController Initialize(IKnotAudioData audioData,
             params IKnotAudioMod[] mods);
 
-        public abstract KnotNativeAudioSourceController Play(bool loop);
+        public abstract KnotAudioSourceController Play(bool loop);
     }
 }
