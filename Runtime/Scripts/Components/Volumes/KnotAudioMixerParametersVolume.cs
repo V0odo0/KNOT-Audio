@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Knot.Audio
 {
     [AddComponentMenu(KnotAudio.CoreName + "/AudioMixer Parameters Volume", 1000)]
-    public class KnotAudioMixerParametersVolume : KnotAudioVolumeObject<KnotAudioMixerParametersVolume>
+    public class KnotAudioMixerParametersVolume : KnotTrackedVolumeObject<KnotAudioMixerParametersVolume>
     {
         public List<Parameter> Parameters => _parameters ?? (_parameters = new List<Parameter>());
         [SerializeField] private List<Parameter> _parameters;

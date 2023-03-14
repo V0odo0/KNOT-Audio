@@ -1,0 +1,16 @@
+{
+    "name": "Knot.Audio.Demo",
+    "rootNamespace": "Knot.Audio.Demo",
+    "references": [
+        "GUID:c9a232f8a64b0164eb47c3af6073d2a4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

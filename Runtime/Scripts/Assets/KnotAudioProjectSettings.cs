@@ -1,11 +1,14 @@
 ﻿#pragma warning disable CS0649
 
 using System.Collections.Generic;
+using Knot.Audio.Attributes;
 using UnityEngine;
 using UnityEngine.Audio;
 
 namespace Knot.Audio
 {
+    [KnotTypeInfo("Project Settings")]
+    [CreateAssetMenu(fileName = "KnotAudioProjectSettings", menuName = KnotAudio.CoreName + "/Project Settings", order = -100)]
     public class KnotAudioProjectSettings : ScriptableObject
     {
         internal static KnotAudioProjectSettings Empty => _empty ?? (_empty = CreateDefault());
@@ -19,7 +22,7 @@ namespace Knot.Audio
         [SerializeField] private AudioMixerSnapshot _defaultSnapshot;
 
         public bool EnableVolumes => _enableVolumes;
-        [SerializeField] private bool _enableVolumes;
+        [SerializeField] private bool _enableVolumes = true;
 
         public IReadOnlyList<KnotAudioGroup> AudioGroups => _audioGroups ?? (_audioGroups = new List<KnotAudioGroup>());
         [SerializeField, Space] private List<KnotAudioGroup> _audioGroups;

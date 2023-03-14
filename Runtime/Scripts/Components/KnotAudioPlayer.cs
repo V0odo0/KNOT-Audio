@@ -6,19 +6,11 @@ using UnityEngine;
 
 namespace Knot.Audio
 {
-    [AddComponentMenu(KnotAudio.CoreName + "/Audio Player", 1000)]
+    [AddComponentMenu(KnotAudio.CoreName + "/Audio Player", 0)]
     public class KnotAudioPlayer : KnotTrackedMonoBehaviour<KnotAudioPlayer>
     {
-        public virtual List<IKnotAudioDataProvider> AudioDataProviders
-        {
-            get => _audioDataProviders ?? (_audioDataProviders = new List<IKnotAudioDataProvider>());
-            set
-            {
-                if (value == null)
-                    _audioDataProviders?.Clear();
-                else _audioDataProviders = value.ToList();
-            }
-        }
+        public virtual List<IKnotAudioDataProvider> AudioDataProviders =>
+            _audioDataProviders ?? (_audioDataProviders = new List<IKnotAudioDataProvider>());
         [SerializeReference, KnotTypePicker(typeof(IKnotAudioDataProvider))]
         private List<IKnotAudioDataProvider> _audioDataProviders;
 
@@ -49,16 +41,6 @@ namespace Knot.Audio
                 Play();
         }
 
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-        }
-
-        protected virtual void Reset()
-        {
-            _audioDataProviders = new List<IKnotAudioDataProvider>(new []{new KnotInstanceAudioDataProvider()});
-        }
-
 
         public virtual void Play()
         {
@@ -67,7 +49,7 @@ namespace Knot.Audio
 
         public virtual void Play(int id)
         {
-            if (AudioDataProviders.Count == 0 || id < 0 || id >= AudioDataProviders.Count)
+            if (id < 0 || id >= AudioDataProviders.Count)
                 return;
 
             if (Loop)

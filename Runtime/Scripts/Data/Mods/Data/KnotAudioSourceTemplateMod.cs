@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Knot.Audio
 {
     [Serializable]
-    [KnotTypeInfo(displayName:"Audio Source Template")]
+    [KnotTypeInfo(displayName:"AudioSource Template")]
     public class KnotAudioSourceTemplateMod : IKnotAudioDataMod, IKnotAudioGroupMod
     {
         public AudioSource Template
@@ -23,7 +23,12 @@ namespace Knot.Audio
             _template = template;
         }
 
+        public void Initialize(KnotAudioSourceController sourceController)
+        {
+            
+        }
 
+        /*
         public void Initialize(KnotAudioSourceController sourceController)
         {
             if (Template == null)
@@ -61,6 +66,6 @@ namespace Knot.Audio
                     //
                 }
             }
-        }
+        }*/
     }
 }

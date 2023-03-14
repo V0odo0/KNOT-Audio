@@ -13,9 +13,54 @@ namespace Knot.Audio
     {
         internal const string CoreName = "KNOT Audio";
 
-        public static KnotAudioProjectSettings ProjectSettings =>
-            _projectSettings ?? (_projectSettings = LoadProjectSettings());
+        public static KnotAudioProjectSettings ProjectSettings
+        {
+            get
+            {
+                if (Manager == null || Manager.OverrideProjectSettings == null)
+                    return _projectSettings ?? (_projectSettings = LoadProjectSettings());
+
+                return Manager.OverrideProjectSettings;
+            }
+            set
+            {
+                if (Manager == null || Manager.OverrideProjectSettings == value)
+                    return;
+
+                var prev = Manager.OverrideProjectSettings;
+                Manager.OverrideProjectSettings = value;
+                Manager.SetProjectSettings(value == null && prev != null ? ProjectSettings : Manager.OverrideProjectSettings);
+            }
+        }
         private static KnotAudioProjectSettings _projectSettings;
+
+        public static Transform AudioListener
+        {
+            get
+            {
+                if (Manager == null)
+                    return null;
+
+                if (Manager.OverrideAudioListener != null)
+                    return Manager.OverrideAudioListener;
+
+                if (_audioListener == null)
+                {
+                    var listener = GameObject.FindObjectOfType<AudioListener>();
+                    if (listener != null)
+                        _audioListener = listener.transform;
+                }
+                return _audioListener;
+            }
+            set
+            {
+                if (Manager == null)
+                    return;
+
+                Manager.OverrideAudioListener = value;
+            }
+        }
+        private static Transform _audioListener;
 
         internal static KnotAudioManager Manager => _manager;
         private static KnotAudioManager _manager;
@@ -211,6 +256,9 @@ namespace Knot.Audio
 
         internal class KnotAudioManager : MonoBehaviour
         {
+            public KnotAudioProjectSettings OverrideProjectSettings { get; set; }
+            public Transform OverrideAudioListener { get; set; }
+
             public Dictionary<string, IKnotAudioData> LibraryEntries => _libraryEntries ??
                 (_libraryEntries = new Dictionary<string, IKnotAudioData>());
             private Dictionary<string, IKnotAudioData> _libraryEntries;
@@ -224,15 +272,11 @@ namespace Knot.Audio
 
             public Dictionary<string, KnotAudioGroup> AudioGroupsOverrides => _audioGroupsOverrides ?? (_audioGroupsOverrides = new Dictionary<string, KnotAudioGroup>());
             private Dictionary<string, KnotAudioGroup> _audioGroupsOverrides;
-
-            public AudioListener AudioListener => _audioListener ?? (_audioListener = FindObjectOfType<AudioListener>());
-            private AudioListener _audioListener;
-
+            
             private Dictionary<AudioMixerSnapshot, float> _snapshotWeights = new Dictionary<AudioMixerSnapshot, float>();
             private List<AudioMixerSnapshot> _activeSnapshotVolumes = new List<AudioMixerSnapshot>();
 
             private Dictionary<string, float> _defaultMixerParameters = new Dictionary<string, float>();
-            private Dictionary<string, float> _overrideMixerParameters = new Dictionary<string, float>();
             private List<string> _activeMixerParameters = new List<string>();
 
 
@@ -259,7 +303,7 @@ namespace Knot.Audio
                     if (instance.Snapshot == null)
                         continue;
 
-                    var weight = instance.GetWeight(this.AudioListener.transform.position);
+                    var weight = instance.GetWeight(AudioListener.position);
                     if (_activeSnapshotVolumes.Contains(instance.Snapshot))
                     {
                         if (_snapshotWeights[instance.Snapshot] > weight)
@@ -308,10 +352,19 @@ namespace Knot.Audio
                 }
             }
 
-            KnotAudioSourceController InstantiateAudioSource()
+            KnotAudioSourceController InstantiateController(IEnumerable<IKnotAudioMod> mods)
             {
-                var audioSource = new GameObject(nameof(KnotNativeAudioSourceController)).AddComponent<KnotNativeAudioSourceController>();
-                return audioSource;
+                KnotAudioSourceController controller = null;
+                var s = mods.OfType<KnotAudioSourceTemplateMod>().LastOrDefault();
+                if (s == null || s.Template == null)
+                    controller = new GameObject(nameof(KnotNativeAudioSourceController)).AddComponent<KnotNativeAudioSourceController>();
+                else
+                {
+                    var audioSource = Instantiate(s.Template);
+                    controller = audioSource.gameObject.AddComponent<KnotNativeAudioSourceController>();
+                }
+
+                return controller;
             }
 
 
@@ -340,7 +393,6 @@ namespace Knot.Audio
                 }
             }
 
-            
             public KnotAudioSourceController Play(string libraryEntryName, bool loop, params IKnotAudioMod[] mods)
             {
                 if (string.IsNullOrEmpty(libraryEntryName))
@@ -360,7 +412,7 @@ namespace Knot.Audio
                 if (data == null || data.AudioClip == null)
                     return null;
 
-                return InstantiateAudioSource().Initialize(data, mods).Play(loop);
+                return InstantiateController(data.GetAllMods().Union(mods)).Initialize(data, mods).Play(loop);
             }
 
             public KnotAudioSourceController Play(AudioClip clip, bool loop, params IKnotAudioMod[] mods)
@@ -368,7 +420,7 @@ namespace Knot.Audio
                 if (clip == null)
                     return null;
 
-                return InstantiateAudioSource().Initialize(new KnotAudioData(clip), mods).Play(loop);
+                return InstantiateController(mods).Initialize(new KnotAudioData(clip), mods).Play(loop);
             }
         }
     }
