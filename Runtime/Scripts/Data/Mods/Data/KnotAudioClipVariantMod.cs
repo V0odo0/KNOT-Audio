@@ -18,9 +18,9 @@ namespace Knot.Audio
         }
 
 
-        public void Initialize(KnotAudioSourceController sourceController)
+        public void Setup(KnotAudioController controller)
         {
-            sourceController.AudioSource.clip = SelectNext(sourceController.AudioSource.clip);
+            controller.AudioSource.clip = SelectNext(controller.AudioSource.clip);
         }
     }
 }

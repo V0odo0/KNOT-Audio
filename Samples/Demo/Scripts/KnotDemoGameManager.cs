@@ -11,7 +11,7 @@ namespace Knot.Audio.Demo
 
         void Awake()
         {
-            KnotAudio.ProjectSettings = _projectSettings;
+            KnotAudio.Settings = _projectSettings;
         }
     }
 }

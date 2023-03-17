@@ -47,19 +47,19 @@ namespace Knot.Audio
         }
 
 
-        public void Initialize(KnotAudioSourceController sourceController)
+        public void Setup(KnotAudioController controller)
         {
             switch (TrimMode)
             {
                 case KnotAudioClipTimeMode.AbsoluteSeconds:
-                    sourceController.TrimStart = Start;
-                    sourceController.TrimEnd = End;
+                    controller.TrimStart = Start;
+                    controller.TrimEnd = End;
                     break;
                 case KnotAudioClipTimeMode.Normalized:
-                    if (sourceController.AudioSource.clip != null)
+                    if (controller.AudioSource.clip != null)
                     {
-                        sourceController.TrimStart = sourceController.AudioSource.clip.length * Mathf.Clamp01(Start);
-                        sourceController.TrimEnd = sourceController.AudioSource.clip.length * Mathf.Clamp01(End);
+                        controller.TrimStart = controller.AudioSource.clip.length * Mathf.Clamp01(Start);
+                        controller.TrimEnd = controller.AudioSource.clip.length * Mathf.Clamp01(End);
                     }
                     break;
             }

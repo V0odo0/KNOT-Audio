@@ -40,11 +40,11 @@ namespace Knot.Audio
         }
 
 
-        public void Initialize(KnotAudioSourceController sourceController)
+        public void Setup(KnotAudioController controller)
         {
-            sourceController.AudioSource.bypassEffects = BypassEffects;
-            sourceController.AudioSource.bypassListenerEffects = BypassListenerEffects;
-            sourceController.AudioSource.bypassReverbZones = BypassReverbZones;
+            controller.AudioSource.bypassEffects = BypassEffects;
+            controller.AudioSource.bypassListenerEffects = BypassListenerEffects;
+            controller.AudioSource.bypassReverbZones = BypassReverbZones;
 
         }
     }

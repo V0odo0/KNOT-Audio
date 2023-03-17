@@ -10,13 +10,13 @@ namespace Knot.Audio.Attributes
     public class KnotTypePickerAttribute : PropertyAttribute
     {
         public readonly Type BaseType;
-        public readonly bool DrawLabel;
+        public readonly bool AllowSameTypeInArray;
 
-
-        public KnotTypePickerAttribute(Type baseType, bool drawLabel = true)
+        
+        public KnotTypePickerAttribute(Type baseType, bool allowMultipleTypesInArray = true)
         {
             BaseType = baseType;
-            DrawLabel = drawLabel;
+            AllowSameTypeInArray = allowMultipleTypesInArray;
         }
     }
 }

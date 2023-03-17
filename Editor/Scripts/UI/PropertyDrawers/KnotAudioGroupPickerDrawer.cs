@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Knot.Audio.Attributes;
 using UnityEditor;
 using UnityEngine;
@@ -12,25 +9,34 @@ namespace Knot.Audio.Editor
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (KnotAudio.ProjectSettings == null || property.propertyType != SerializedPropertyType.String)
+            if (KnotAudio.Settings == null || property.propertyType != SerializedPropertyType.String)
             {
                 base.OnGUI(position, property, label);
                 return;
             }
             
             EditorGUI.BeginProperty(position, label, property);
-            EditorGUI.BeginChangeCheck();
-            
-            int id;
-            if (KnotAudioProjectSettings.CachedAudioGroupNames.Contains(property.stringValue))
-            {
-                id = KnotAudioProjectSettings.CachedAudioGroupNamesList.IndexOf(property.stringValue);
-                id = EditorGUI.Popup(position, label.text, id, KnotAudioProjectSettings.CachedAudioGroupNames);
-            }
-            else id = EditorGUI.Popup(position, label.text, 0, KnotAudioProjectSettings.CachedAudioGroupNames);
+            EditorGUI.LabelField(position, label);
 
-            if (EditorGUI.EndChangeCheck())
-                property.stringValue = id == 0 ? string.Empty : KnotAudioProjectSettings.CachedAudioGroupNames[id];
+            Rect popupPos = new Rect(position.x + EditorGUIUtility.labelWidth, position.y,
+                position.width - EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight);
+
+            if (EditorGUI.DropdownButton(popupPos, EditorGUIUtility.TrTextContent(string.IsNullOrEmpty(property.stringValue) ? "[None]" : property.stringValue),
+                    FocusType.Keyboard))
+            {
+                GenericMenu menu = new GenericMenu();
+                foreach (var groupName in KnotAudioSettingsProfile.CachedAudioGroupNames)
+                {
+                    bool isSelected = groupName == property.stringValue;
+                    menu.AddItem(EditorGUIUtility.TrTextContent(groupName), isSelected, () =>
+                    {
+                        property.stringValue = groupName;
+                        property.serializedObject.ApplyModifiedProperties();
+                    });
+                }
+
+                menu.DropDown(popupPos);
+            }
 
             EditorGUI.EndProperty();
         }

@@ -9,7 +9,7 @@ namespace Knot.Audio
     {
         public List<IKnotVolumeSource> VolumeSources =>
             _volumeSources ?? (_volumeSources = new List<IKnotVolumeSource>());
-        [SerializeReference, KnotTypePicker(typeof(IKnotVolumeSource), false)]
+        [SerializeReference, KnotTypePicker(typeof(IKnotVolumeSource))]
         private List<IKnotVolumeSource> _volumeSources;
         
         public float BlendDistance

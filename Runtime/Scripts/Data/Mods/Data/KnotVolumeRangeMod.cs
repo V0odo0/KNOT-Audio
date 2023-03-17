@@ -38,14 +38,25 @@ namespace Knot.Audio
 
         public float Sample() => Random.Range(Min, Max);
 
-        public void Initialize(KnotAudioSourceController sourceController)
+        public void Setup(KnotAudioController controller)
         {
-            if (sourceController == null)
+            if (controller == null)
                 return;
 
             var sample = Sample();
-            sourceController.MaxVolume = sample;
-            sourceController.AudioSource.volume = sample;
+            controller.MaxVolume = sample;
+            controller.AudioSource.volume = sample;
+        }
+    }
+    
+    public partial struct KnotAudioControllerHandle
+    {
+        public KnotAudioControllerHandle WithVolumeRange(float min, float max)
+        {
+            if (Controller != null)
+                Controller.AppendMods(new KnotVolumeRangeMod(min, max));
+
+            return this;
         }
     }
 }

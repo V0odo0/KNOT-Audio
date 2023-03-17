@@ -23,19 +23,19 @@ namespace Knot.Audio
             _template = template;
         }
 
-        public void Initialize(KnotAudioSourceController sourceController)
+        public void Setup(KnotAudioController controller)
         {
             
         }
 
         /*
-        public void Initialize(KnotAudioSourceController sourceController)
+        public void Setup(KnotAudioController controller)
         {
             if (Template == null)
                 return;
 
             var from = Template;
-            var to = sourceController.AudioSource;
+            var to = controller.AudioSource;
 
             to.outputAudioMixerGroup = from.outputAudioMixerGroup;
             to.mute = from.mute;

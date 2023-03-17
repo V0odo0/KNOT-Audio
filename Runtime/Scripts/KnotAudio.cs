@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
+using Object = UnityEngine.Object;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -13,26 +15,28 @@ namespace Knot.Audio
     {
         internal const string CoreName = "KNOT Audio";
 
-        public static KnotAudioProjectSettings ProjectSettings
+        internal static KnotAudioProjectSettings ProjectSettings =>
+            _projectSettings ?? (_projectSettings = LoadProjectSettings());
+        private static KnotAudioProjectSettings _projectSettings;
+        
+        public static KnotAudioSettingsProfile Settings
         {
             get
             {
-                if (Manager == null || Manager.OverrideProjectSettings == null)
-                    return _projectSettings ?? (_projectSettings = LoadProjectSettings());
-
-                return Manager.OverrideProjectSettings;
+                if (Manager == null || Manager.OverrideSettings == null)
+                    return ProjectSettings.CustomSettings == null ? _projectSettings : _projectSettings.CustomSettings;
+                return Manager.OverrideSettings;
             }
             set
             {
-                if (Manager == null || Manager.OverrideProjectSettings == value)
+                if (Manager == null || Manager.OverrideSettings == value)
                     return;
 
-                var prev = Manager.OverrideProjectSettings;
-                Manager.OverrideProjectSettings = value;
-                Manager.SetProjectSettings(value == null && prev != null ? ProjectSettings : Manager.OverrideProjectSettings);
+                var prev = Manager.OverrideSettings;
+                Manager.OverrideSettings = value;
+                Manager.SetSettings(value == null && prev != null ? Settings : Manager.OverrideSettings);
             }
         }
-        private static KnotAudioProjectSettings _projectSettings;
 
         public static Transform AudioListener
         {
@@ -69,7 +73,7 @@ namespace Knot.Audio
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         static void Init()
         {
-            if (ProjectSettings == null)
+            if (Settings == null)
                 return;
 
             _manager = GetAudioManager();
@@ -104,7 +108,12 @@ namespace Knot.Audio
                     PlayerSettings.SetPreloadedAssets(preloadedAssets.Append(settings).ToArray());
                 }
             }
-            else settings = allSettings.First();
+            else
+            {
+                settings = allSettings.FirstOrDefault(p => p.name.Equals(nameof(KnotAudioProjectSettings)));
+                if (settings == null)
+                    settings = allSettings.First();
+            }
 #else
             settings = Resources.FindObjectsOfTypeAll<KnotAudioProjectSettings>().FirstOrDefault();
 #endif
@@ -120,7 +129,7 @@ namespace Knot.Audio
         static KnotAudioManager GetAudioManager()
         {
             var manager = new GameObject(nameof(KnotAudioManager)).AddComponent<KnotAudioManager>();
-            manager.SetProjectSettings(ProjectSettings);
+            manager.SetSettings(Settings);
             Object.DontDestroyOnLoad(manager);
 
             return manager;
@@ -144,35 +153,20 @@ namespace Knot.Audio
         }
 
 
-        public static KnotAudioSourceController PlayOnce(this KnotAudioDataReference reference, params IKnotAudioMod[] mods) =>
-            reference == null ? null : PlayOnce(reference.Provider, mods);
+        public static KnotAudioControllerHandle Play(this KnotAudioDataReference reference, KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot, params IKnotAudioMod[] mods) =>
+            reference == null ? default : Play(reference.Provider, playMode, mods);
 
-        public static KnotAudioSourceController PlayOnce(this IKnotAudioDataProvider provider, params IKnotAudioMod[] mods) =>
-            provider == null ? null : PlayOnce(provider.AudioData, mods);
+        public static KnotAudioControllerHandle Play(this IKnotAudioDataProvider provider, KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot, params IKnotAudioMod[] mods) =>
+            provider == null ? default : Play(provider.AudioData, playMode,mods);
 
-        public static KnotAudioSourceController PlayOnce(this IKnotAudioData data, params IKnotAudioMod[] mods) =>
-            Manager == null ? null : Manager.Play(data, false, mods);
+        public static KnotAudioControllerHandle Play(this IKnotAudioData data, KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot, params IKnotAudioMod[] mods) =>
+            Manager == null ? default : Manager.Play(data, playMode, mods);
 
-        public static KnotAudioSourceController PlayOnce(this AudioClip clip, params IKnotAudioMod[] mods) =>
-            Manager == null ? null : Manager.Play(clip, false, mods);
+        public static KnotAudioControllerHandle Play(this AudioClip clip, KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot, params IKnotAudioMod[] mods) =>
+            Manager == null ? default : Manager.Play(clip, playMode, mods);
 
-        public static KnotAudioSourceController PlayOnce(string libraryEntryName, params IKnotAudioMod[] mods) =>
-            Manager == null ? null : Manager.Play(libraryEntryName, false, mods);
-
-        public static KnotAudioSourceController PlayLoop(this KnotAudioDataReference reference, params IKnotAudioMod[] mods) =>
-            reference == null ? null : PlayLoop(reference.Provider, mods);
-        
-        public static KnotAudioSourceController PlayLoop(this IKnotAudioDataProvider provider, params IKnotAudioMod[] mods) =>
-            provider == null ? null : Manager.Play(provider.AudioData, true, mods);
-        
-        public static KnotAudioSourceController PlayLoop(this IKnotAudioData data, params IKnotAudioMod[] mods) =>
-            Manager == null ? null : Manager.Play(data, true, mods);
-
-        public static KnotAudioSourceController PlayLoop(this AudioClip clip, params IKnotAudioMod[] mods) =>
-            Manager == null ? null : Manager.Play(clip, true, mods);
-
-        public static KnotAudioSourceController PlayLoop(string libraryEntryName, params IKnotAudioMod[] mods) =>
-            Manager == null ? null : Manager.Play(libraryEntryName, true, mods);
+        public static KnotAudioControllerHandle Play(string libraryEntryName, KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot, params IKnotAudioMod[] mods) =>
+            Manager == null ? default : Manager.Play(libraryEntryName, playMode, mods);
 
 
         public static KnotAudioGroup GetAudioGroup(string groupName)
@@ -181,7 +175,7 @@ namespace Knot.Audio
                 return null;
 
             if (Manager == null)
-                return ProjectSettings.AudioGroups.FirstOrDefault(g => g.Name == groupName);
+                return Settings.AudioGroups.FirstOrDefault(g => g.Name == groupName);
 
             if (Manager.AudioGroupsOverrides.TryGetValue(groupName, out var groupOverride))
                 return groupOverride;
@@ -220,7 +214,7 @@ namespace Knot.Audio
                 return null;
 
             if (Manager == null)
-                return ProjectSettings.AudioDataLibraries.SelectMany(p => p.Entries).FirstOrDefault(g => g.Name == name)?.Provider?.AudioData;
+                return Settings.AudioDataLibraries.SelectMany(p => p.Entries).FirstOrDefault(g => g.Name == name)?.Provider?.AudioData;
 
             if (Manager.LibraryEntriesOverrides.TryGetValue(name, out var dataOverride))
                 return dataOverride;
@@ -256,7 +250,7 @@ namespace Knot.Audio
 
         internal class KnotAudioManager : MonoBehaviour
         {
-            public KnotAudioProjectSettings OverrideProjectSettings { get; set; }
+            public KnotAudioSettingsProfile OverrideSettings { get; set; }
             public Transform OverrideAudioListener { get; set; }
 
             public Dictionary<string, IKnotAudioData> LibraryEntries => _libraryEntries ??
@@ -280,6 +274,9 @@ namespace Knot.Audio
             private List<string> _activeMixerParameters = new List<string>();
 
 
+            private Dictionary<KnotInstanceLimitMod, HashSet<KnotAudioController>> _limitInstances =
+                new Dictionary<KnotInstanceLimitMod, HashSet<KnotAudioController>>();
+
             void Update()
             {
                 UpdateSnapshotVolumes();
@@ -294,7 +291,7 @@ namespace Knot.Audio
 
             void UpdateSnapshotVolumes()
             {
-                if (!ProjectSettings.EnableVolumes || ProjectSettings.DefaultSnapshot == null || AudioListener == null)
+                if (!Settings.EnableVolumes || Settings.DefaultSnapshot == null || AudioListener == null)
                     return;
 
                 _activeSnapshotVolumes.Clear();
@@ -320,16 +317,16 @@ namespace Knot.Audio
                     if (!_activeSnapshotVolumes.Contains(snapshot))
                         _snapshotWeights[snapshot] = 0;
 
-                if (!_snapshotWeights.ContainsKey(ProjectSettings.DefaultSnapshot))
-                    _snapshotWeights.Add(ProjectSettings.DefaultSnapshot, 1);
-                _snapshotWeights[ProjectSettings.DefaultSnapshot] = 1 - _snapshotWeights.Values.Max();
+                if (!_snapshotWeights.ContainsKey(Settings.DefaultSnapshot))
+                    _snapshotWeights.Add(Settings.DefaultSnapshot, 1);
+                _snapshotWeights[Settings.DefaultSnapshot] = 1 - _snapshotWeights.Values.Max();
 
-                ProjectSettings.DefaultSnapshot.audioMixer.TransitionToSnapshots(_snapshotWeights.Keys.ToArray(), _snapshotWeights.Values.ToArray(), 0);
+                Settings.DefaultSnapshot.audioMixer.TransitionToSnapshots(_snapshotWeights.Keys.ToArray(), _snapshotWeights.Values.ToArray(), 0);
             }
 
             void UpdateMixerParameterVolumes()
             {
-                if (!ProjectSettings.EnableVolumes || ProjectSettings.DefaultAudioMixer == null || AudioListener == null)
+                if (!Settings.EnableVolumes || Settings.DefaultAudioMixer == null || AudioListener == null)
                     return;
 
                 _activeMixerParameters.Clear();
@@ -338,7 +335,7 @@ namespace Knot.Audio
                     float weight = vol.GetWeight(AudioListener.transform.position);
                     foreach (var parameter in vol.Parameters)
                     {
-                        if (ProjectSettings.DefaultAudioMixer.GetFloat(parameter.Name, out var currentValue))
+                        if (Settings.DefaultAudioMixer.GetFloat(parameter.Name, out var currentValue))
                         {
                             if (!_defaultMixerParameters.ContainsKey(parameter.Name))
                                 _defaultMixerParameters.Add(parameter.Name, currentValue);
@@ -346,29 +343,84 @@ namespace Knot.Audio
                             var blendValue = Mathf.Lerp(_defaultMixerParameters[parameter.Name], 
                                 parameter.TargetValue, weight);
 
-                            ProjectSettings.DefaultAudioMixer.SetFloat(parameter.Name, blendValue);
+                            Settings.DefaultAudioMixer.SetFloat(parameter.Name, blendValue);
                         }
                     }
                 }
             }
 
-            KnotAudioSourceController InstantiateController(IEnumerable<IKnotAudioMod> mods)
+            IEnumerable<IKnotAudioMod> GetGroupMods(string groupName)
             {
-                KnotAudioSourceController controller = null;
-                var s = mods.OfType<KnotAudioSourceTemplateMod>().LastOrDefault();
-                if (s == null || s.Template == null)
-                    controller = new GameObject(nameof(KnotNativeAudioSourceController)).AddComponent<KnotNativeAudioSourceController>();
+                return GetAudioGroup(groupName)?.Mods.Cast<IKnotAudioMod>() ?? Array.Empty<IKnotAudioMod>();
+            }
+
+            KnotAudioController GetControllerInstance(IEnumerable<IKnotAudioMod> allMods)
+            {
+                KnotAudioController controller = null;
+                
+                var instanceLimit = allMods.OfType<KnotInstanceLimitMod>().LastOrDefault();
+                if (instanceLimit != null)
+                {
+                    if (_limitInstances.TryGetValue(instanceLimit, out var instances))
+                    {
+                        instances.RemoveWhere(c => c == null);
+                        if (instances.Count >= instanceLimit.InstanceLimit)
+                        {
+                            switch (instanceLimit.LimitSolveMethod)
+                            {
+                                case KnotInstanceLimitMod.InstanceLimitSolveMethod.DestroyOld:
+                                    var oldestInstance = instances.OrderBy(c => c.InstanceCreationTimestamp)
+                                        .FirstOrDefault();
+                                    if (oldestInstance != null)
+                                        Destroy(oldestInstance.gameObject);
+                                    break;
+                                case KnotInstanceLimitMod.InstanceLimitSolveMethod.DestroyMostDistant:
+                                    if (AudioListener == null)
+                                        goto case KnotInstanceLimitMod.InstanceLimitSolveMethod.DonNotPlayNew;
+
+                                    KnotAudioController distantInstance = null;
+                                    float maxDistance = 0;
+                                    foreach (var instance in instances)
+                                    {
+                                        var curDistance = Vector3.Distance(AudioListener.position, instance.transform.position);
+                                        if (curDistance > maxDistance)
+                                        {
+                                            maxDistance = curDistance;
+                                            distantInstance = instance;
+                                        }
+                                    }
+
+                                    if (distantInstance != null)
+                                        Destroy(distantInstance.gameObject);
+                                    break;
+                                case KnotInstanceLimitMod.InstanceLimitSolveMethod.DonNotPlayNew:
+                                    return null;
+                            }
+                        }
+                    }
+                }
+
+                var template = allMods.OfType<KnotAudioSourceTemplateMod>().LastOrDefault();
+                if (template == null || template.Template == null)
+                    controller = new GameObject(nameof(KnotNativeAudioController)).AddComponent<KnotNativeAudioController>();
                 else
                 {
-                    var audioSource = Instantiate(s.Template);
-                    controller = audioSource.gameObject.AddComponent<KnotNativeAudioSourceController>();
+                    var audioSource = Instantiate(template.Template);
+                    controller = audioSource.gameObject.AddComponent<KnotNativeAudioController>();
+                }
+
+                if (instanceLimit != null)
+                {
+                    if (!_limitInstances.ContainsKey(instanceLimit))
+                        _limitInstances.Add(instanceLimit, new HashSet<KnotAudioController>());
+                    _limitInstances[instanceLimit].Add(controller);
                 }
 
                 return controller;
             }
 
 
-            public void SetProjectSettings(KnotAudioProjectSettings settings)
+            public void SetSettings(KnotAudioSettingsProfile settings)
             {
                 AudioGroups.Clear();
                 foreach (var audioGroup in settings.AudioGroups)
@@ -393,34 +445,30 @@ namespace Knot.Audio
                 }
             }
 
-            public KnotAudioSourceController Play(string libraryEntryName, bool loop, params IKnotAudioMod[] mods)
+            
+            public KnotAudioControllerHandle Play(string libraryEntryName, KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot, params IKnotAudioMod[] mods)
             {
                 if (string.IsNullOrEmpty(libraryEntryName))
-                    return null;
+                    return default;
 
-                if (LibraryEntriesOverrides.TryGetValue(libraryEntryName, out var overrideEntry) && overrideEntry != null)
-                    return Play(overrideEntry, loop, mods);
-
-                if (LibraryEntries.TryGetValue(libraryEntryName, out var entry) && entry != null)
-                    return Play(entry, loop, mods);
-
-                return null;
+                var entry = GetLibraryEntry(libraryEntryName);
+                return entry == null ? default : Play(entry, playMode, mods);
             }
 
-            public KnotAudioSourceController Play(IKnotAudioData data, bool loop, params IKnotAudioMod[] mods)
+            public KnotAudioControllerHandle Play(IKnotAudioData data, KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot, params IKnotAudioMod[] mods)
             {
                 if (data == null || data.AudioClip == null)
-                    return null;
+                    return default;
 
-                return InstantiateController(data.GetAllMods().Union(mods)).Initialize(data, mods).Play(loop);
+                var allMods = GetGroupMods(data.Group).Union(data.GetAllMods().Union(mods));
+                var controller = GetControllerInstance(allMods);
+                return controller == null ? default : new KnotAudioControllerHandle(controller.Setup(data, mods).Play(playMode));
             }
 
-            public KnotAudioSourceController Play(AudioClip clip, bool loop, params IKnotAudioMod[] mods)
+            public KnotAudioControllerHandle Play(AudioClip clip, KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot, params IKnotAudioMod[] mods)
             {
-                if (clip == null)
-                    return null;
-
-                return InstantiateController(mods).Initialize(new KnotAudioData(clip), mods).Play(loop);
+                var controller = GetControllerInstance(mods);
+                return controller == null ? default : new KnotAudioControllerHandle(controller.Setup(new KnotAudioData(clip), mods).Play(playMode));
             }
         }
     }

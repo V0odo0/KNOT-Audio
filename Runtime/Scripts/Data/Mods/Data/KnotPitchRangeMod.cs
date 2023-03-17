@@ -34,12 +34,12 @@ namespace Knot.Audio
 
         public float Sample() => UnityEngine.Random.Range(Min, Max);
 
-        public void Initialize(KnotAudioSourceController sourceController)
+        public void Setup(KnotAudioController controller)
         {
-            if (sourceController == null)
+            if (controller == null)
                 return;
 
-            sourceController.AudioSource.pitch = Sample();
+            controller.AudioSource.pitch = Sample();
         }
     }
 }

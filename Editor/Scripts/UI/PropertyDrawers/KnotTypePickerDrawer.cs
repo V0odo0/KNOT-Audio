@@ -35,49 +35,68 @@ namespace Knot.Audio.Editor
             }
 
             EditorGUI.BeginProperty(position, label, property);
-
-            Type currentType = property.GetManagedReferenceType();
-            var types = BaseType.GetDerivedTypesInfo();
-
-            Rect popupPos = position;
-            popupPos.height = EditorGUIUtility.singleLineHeight;
             
-            EditorGUI.BeginChangeCheck();
+            Rect popupPos = new Rect(position.x + EditorGUIUtility.labelWidth, position.y, 
+                position.width - EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight);
 
-            int selectedTypeInfoId = types.Select((info, i) => new {typeInfo = info, Index = i})
-                .FirstOrDefault(t => t.typeInfo.Type == currentType)?.Index ?? -1;
-            selectedTypeInfoId = Attribute.DrawLabel ? 
-                EditorGUI.Popup(popupPos, label, selectedTypeInfoId, types.Select(ti => ti.Content).ToArray()) : 
-                EditorGUI.Popup(popupPos, selectedTypeInfoId, types.Select(ti => ti.Content).ToArray());
+            Type selectedType = property.GetManagedReferenceType();
 
-            if (EditorGUI.EndChangeCheck() && types[selectedTypeInfoId].Type != property.GetManagedReferenceType())
+            if (selectedType == null)
+                EditorGUI.PrefixLabel(position, label);
+
+            bool isDropdownClicked;
+            if (selectedType == null || Attribute.BaseType == null)
+                isDropdownClicked = EditorGUI.DropdownButton(popupPos, EditorGUIUtility.TrTextContent("[Select Type]"), FocusType.Keyboard);
+            else
             {
-                property.managedReferenceValue = types[selectedTypeInfoId].GetInstance();
-                property.serializedObject.ApplyModifiedProperties();
+                var typeInfo = Attribute.BaseType.GetDerivedTypesInfo().FirstOrDefault(t => t.Type == selectedType);
+                isDropdownClicked = EditorGUI.DropdownButton(popupPos, typeInfo == null ? 
+                    EditorGUIUtility.TrTextContent(selectedType.Name) : 
+                    typeInfo.Content, FocusType.Keyboard);
             }
 
-            if (selectedTypeInfoId >= 0)
+            if (isDropdownClicked)
             {
-                EditorGUI.indentLevel++;
-                position.y += popupPos.height + EditorGUIUtility.standardVerticalSpacing;
-                position.height -= popupPos.height;
-                EditorGUI.PropertyField(position, property, types[selectedTypeInfoId].Content, true);
-                EditorGUI.indentLevel--;
+                var types = BaseType.GetDerivedTypesInfo();
+                GenericMenu menu = new GenericMenu();
 
+                HashSet<Type> typeConstraints = null;
+                if (!Attribute.AllowSameTypeInArray)
+                {
+                    SerializedProperty parentProperty = property.FindParentProperty();
+                    if (parentProperty != null && parentProperty.isArray)
+                    {
+                        typeConstraints = new HashSet<Type>();
+                        for (int i = 0; i < parentProperty.arraySize; i++)
+                        {
+                            typeConstraints.Add(parentProperty.GetArrayElementAtIndex(i).GetManagedReferenceType());
+                        }
+                    }
+                }
+
+                foreach (var t in types)
+                {
+                    bool canSelect = typeConstraints == null || !typeConstraints.Contains(t.Type);
+                    bool isSelected = t.Type == selectedType;
+                    if (canSelect)
+                    {
+                        menu.AddItem(EditorGUIUtility.TrTextContent(t.Info.MenuName), isSelected, () =>
+                        {
+                            property.managedReferenceValue = t.GetInstance();
+                            property.serializedObject.ApplyModifiedProperties();
+                            selectedType = property.GetManagedReferenceType();
+                        });
+                    }
+                    else menu.AddDisabledItem(EditorGUIUtility.TrTextContent(t.Info.MenuName), isSelected);
+                }
+                
+                menu.DropDown(popupPos);
             }
+
+            if (selectedType != null)
+                EditorGUI.PropertyField(position, property, label, true);
 
             EditorGUI.EndProperty();
-        }
-
-        private static IEnumerable<SerializedProperty> GetDirectChildren(SerializedProperty parent)
-        {
-            int dots = parent.propertyPath.Count(c => c == '.');
-            foreach (SerializedProperty inner in parent)
-            {
-                bool isDirectChild = inner.propertyPath.Count(c => c == '.') == dots + 1;
-                if (isDirectChild)
-                    yield return inner;
-            }
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
@@ -85,7 +104,7 @@ namespace Knot.Audio.Editor
             if (!IsValidProperty(property))
                 return base.GetPropertyHeight(property, label);
             
-            return EditorGUI.GetPropertyHeight(property, true) + (property.GetManagedReferenceType() != null ? EditorGUIUtility.singleLineHeight : 0) + 3;
+            return EditorGUI.GetPropertyHeight(property, true) + 3;
         }
     }
 }

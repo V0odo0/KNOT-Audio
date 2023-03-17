@@ -1,0 +1,138 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!244 &-7995999967398472741
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 64d6d04dac54e0945aca8ebd4c8bf048
+  m_EffectName: Attenuation
+  m_MixLevel: 2740381c059c87741a0a579f68a23166
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!243 &-3163210515034198557
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: UI
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: e0875008b1174af4089d7b2c337c35c2
+  m_Children: []
+  m_Volume: ceb467105747b6747a8e42adfd22a2af
+  m_Pitch: 38a926c1cd99caf449d93f8e1ce119ae
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: 3305833927675714457}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!241 &24100000
+AudioMixerController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: KnotDemo_audioMixer
+  m_OutputGroup: {fileID: 0}
+  m_MasterGroup: {fileID: 24300002}
+  m_Snapshots:
+  - {fileID: 24500006}
+  m_StartSnapshot: {fileID: 24500006}
+  m_SuspendThreshold: -80
+  m_EnableSuspend: 1
+  m_UpdateMode: 0
+  m_ExposedParameters: []
+  m_AudioMixerGroupViews:
+  - guids:
+    - 1f72457a21f341c40b9c8710f3cb5be9
+    - 9f1ce2f3c2704a14a9b5ed6cdaeb4ba4
+    - e0875008b1174af4089d7b2c337c35c2
+    name: View
+  m_CurrentViewIndex: 0
+  m_TargetSnapshot: {fileID: 24500006}
+--- !u!243 &24300002
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Master
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 1f72457a21f341c40b9c8710f3cb5be9
+  m_Children:
+  - {fileID: -3163210515034198557}
+  - {fileID: 2568057109829045644}
+  m_Volume: 8a1e90426838dfc4db9a52679f16ad83
+  m_Pitch: 23bcbd9ded0d1014bbcddd0732297000
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: 24400004}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!244 &24400004
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 0bcb9403eb8aca046aa564e2f7941e9f
+  m_EffectName: Attenuation
+  m_MixLevel: e34f021a58e66354c9aa11690dea22b4
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!245 &24500006
+AudioMixerSnapshotController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: KnotDemo_DefaultSnapshot
+  m_AudioMixer: {fileID: 24100000}
+  m_SnapshotID: 5df1a5dcb2cb31448a4aa1b9f1e80542
+  m_FloatValues: {}
+  m_TransitionOverrides: {}
+--- !u!243 &2568057109829045644
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: World
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 9f1ce2f3c2704a14a9b5ed6cdaeb4ba4
+  m_Children: []
+  m_Volume: 109e1382b61eb274d983dc4e7e69690d
+  m_Pitch: 74fb3e8881184fa44943c6e7d2ac8de8
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -7995999967398472741}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!244 &3305833927675714457
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 5c864c451378f774881261c30b2c7034
+  m_EffectName: Attenuation
+  m_MixLevel: 0f034bfb80ae82649b01480f1e4f92b1
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0

@@ -25,9 +25,9 @@ namespace Knot.Audio
         }
 
 
-        public void Initialize(KnotAudioSourceController sourceController)
+        public void Setup(KnotAudioController controller)
         {
-            sourceController.AudioSource.outputAudioMixerGroup = _group;
+            controller.AudioSource.outputAudioMixerGroup = _group;
         }
     }
 }

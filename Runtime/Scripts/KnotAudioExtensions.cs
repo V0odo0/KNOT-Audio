@@ -12,75 +12,75 @@ namespace Knot.Audio
         private static KnotSetPositionMod _setPosition { get; } = new KnotSetPositionMod();
 
 
-        public static KnotNativeAudioSourceController SetParent(this KnotNativeAudioSourceController audioSourceController, Transform parent)
+        public static KnotNativeAudioController SetParent(this KnotNativeAudioController audioController, Transform parent)
         {
-            if (audioSourceController != null)
+            if (audioController != null)
             {
                 _setParent.Parent = parent;
-                _setParent.Initialize(audioSourceController);
+                _setParent.Setup(audioController);
             }
 
-            return audioSourceController;
+            return audioController;
         }
 
-        public static KnotNativeAudioSourceController WithPitch(this KnotNativeAudioSourceController audioSourceController, float pitch)
+        public static KnotNativeAudioController WithPitch(this KnotNativeAudioController audioController, float pitch)
         {
-            if (audioSourceController != null)
+            if (audioController != null)
             {
                 _pitchRange.Min = pitch;
                 _pitchRange.Max = pitch;
-                _pitchRange.Initialize(audioSourceController);
+                _pitchRange.Setup(audioController);
             }
 
-            return audioSourceController;
+            return audioController;
         }
 
-        public static KnotNativeAudioSourceController WithPitchRange(this KnotNativeAudioSourceController audioSourceController, float min, float max)
+        public static KnotNativeAudioController WithPitchRange(this KnotNativeAudioController audioController, float min, float max)
         {
-            if (audioSourceController != null)
+            if (audioController != null)
             {
                 _pitchRange.Min = min;
                 _pitchRange.Max = max;
-                _pitchRange.Initialize(audioSourceController);
+                _pitchRange.Setup(audioController);
             }
 
-            return audioSourceController;
+            return audioController;
         }
 
-        public static KnotNativeAudioSourceController WithVolume(this KnotNativeAudioSourceController audioSourceController, float volume)
+        public static KnotNativeAudioController WithVolume(this KnotNativeAudioController audioController, float volume)
         {
-            if (audioSourceController != null)
+            if (audioController != null)
             {
                 _volumeRange.Min = volume;
                 _volumeRange.Max = volume;
-                _volumeRange.Initialize(audioSourceController);
+                _volumeRange.Setup(audioController);
             }
 
-            return audioSourceController;
+            return audioController;
         }
 
-        public static KnotNativeAudioSourceController WithVolumeRange(this KnotNativeAudioSourceController audioSourceController, float min, float max)
+        public static KnotNativeAudioController WithVolumeRange(this KnotNativeAudioController audioController, float min, float max)
         {
-            if (audioSourceController != null)
+            if (audioController != null)
             {
                 _volumeRange.Min = min;
                 _volumeRange.Max = max;
-                _volumeRange.Initialize(audioSourceController);
+                _volumeRange.Setup(audioController);
             }
 
-            return audioSourceController;
+            return audioController;
         }
 
-        public static KnotNativeAudioSourceController AtPosition(this KnotNativeAudioSourceController audioSourceController, Vector3 pos, Space space = Space.Self)
+        public static KnotNativeAudioController AtPosition(this KnotNativeAudioController audioController, Vector3 pos, Space space = Space.Self)
         {
-            if (audioSourceController != null)
+            if (audioController != null)
             {
                 _setPosition.Position = pos;
                 _setPosition.Space = space;
-                _setPosition.Initialize(audioSourceController);
+                _setPosition.Setup(audioController);
             }
 
-            return audioSourceController;
+            return audioController;
         }
     }
 }

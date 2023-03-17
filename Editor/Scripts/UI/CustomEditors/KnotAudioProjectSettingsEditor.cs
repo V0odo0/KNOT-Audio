@@ -11,6 +11,7 @@ namespace Knot.Audio.Editor
         {
             "knot",
             "audio",
+            "sound"
         };
 
 
@@ -41,9 +42,22 @@ namespace Knot.Audio.Editor
         {
             var provider = new SettingsProvider(SettingsPath, SettingsScope.Project, DefaultKeyWords);
             var editor = CreateEditor(KnotAudio.ProjectSettings);
+            SerializedObject sObj = new SerializedObject(KnotAudio.ProjectSettings);
+            
             provider.guiHandler += s =>
             {
-                editor.OnInspectorGUI();
+                var customProfileProperty = sObj.FindProperty("_customSettings");
+
+                sObj.Update();
+                EditorGUILayout.PropertyField(customProfileProperty);
+                sObj.ApplyModifiedProperties();
+
+                EditorGUILayout.Space();
+                if (customProfileProperty.objectReferenceValue == null)
+                {
+                    EditorGUILayout.LabelField("Default Settings", EditorStyles.boldLabel);
+                    editor.OnInspectorGUI();
+                }
             };
 
             return provider;

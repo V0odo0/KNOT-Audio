@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4a9d6fe61e8a9547bc3f3ca1d49984b, type: 3}
+  m_Name: KnotDemo_player_footstep_C
+  m_EditorClassIdentifier: 
+  _audioData:
+    _audioClip: {fileID: 8300000, guid: d0dcef296c824204fb29a2d63e0763d8, type: 3}
+    _group: World
+    _mods:
+    - id: 0
+    - id: 1
+    - id: 2
+  references:
+    version: 1
+    00000000:
+      type: {class: KnotVolumeRangeMod, ns: Knot.Audio, asm: Knot.Audio}
+      data:
+        _min: 0.3
+        _max: 0.4
+    00000001:
+      type: {class: KnotPitchRangeMod, ns: Knot.Audio, asm: Knot.Audio}
+      data:
+        _min: 1
+        _max: 1.1
+    00000002:
+      type: {class: KnotAudioClipTrimMod, ns: Knot.Audio, asm: Knot.Audio}
+      data:
+        _start: 2
+        _end: 2.8
+        _trimMode: 0

@@ -12,8 +12,8 @@ namespace Knot.Audio.Editor
         public void OnPreprocessBuild(BuildReport report)
         {
             var preloadedAssets = PlayerSettings.GetPreloadedAssets();
-            if (!preloadedAssets.Contains(KnotAudio.ProjectSettings))
-                PlayerSettings.SetPreloadedAssets(preloadedAssets.Append(KnotAudio.ProjectSettings).ToArray());
+            if (!preloadedAssets.Contains(KnotAudio.Settings))
+                PlayerSettings.SetPreloadedAssets(preloadedAssets.Append(KnotAudio.Settings).ToArray());
         }
     }
 }

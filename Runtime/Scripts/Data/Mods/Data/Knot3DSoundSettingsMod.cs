@@ -63,13 +63,13 @@ namespace Knot.Audio
         }
 
 
-        public void Initialize(KnotAudioSourceController sourceController)
+        public void Setup(KnotAudioController controller)
         {
-            sourceController.AudioSource.dopplerLevel = DopplerLevel;
-            sourceController.AudioSource.spread = Spread;
-            sourceController.AudioSource.minDistance = MinDistance;
-            sourceController.AudioSource.maxDistance = MaxDistance;
-            sourceController.AudioSource.rolloffMode = RolloffMode;
+            controller.AudioSource.dopplerLevel = DopplerLevel;
+            controller.AudioSource.spread = Spread;
+            controller.AudioSource.minDistance = MinDistance;
+            controller.AudioSource.maxDistance = MaxDistance;
+            controller.AudioSource.rolloffMode = RolloffMode;
         }
     }
 }

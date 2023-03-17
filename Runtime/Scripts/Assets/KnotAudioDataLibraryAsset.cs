@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Knot.Audio.Attributes;
 using UnityEngine;
 using static Knot.Audio.KnotAudioDataLibraryAsset;
@@ -19,6 +20,15 @@ namespace Knot.Audio
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public IEnumerator<AudioDataLibraryEntry> GetEnumerator() => _entries.GetEnumerator();
+
+
+        protected virtual void OnValidate()
+        {
+#if UNITY_EDITOR
+            if (KnotAudio.Settings != null && KnotAudio.Settings.AudioDataLibraries.Contains(this))
+                KnotAudioSettingsProfile.RebuildCachedLibraryEntries();
+#endif
+        }
 
 
         [Serializable]

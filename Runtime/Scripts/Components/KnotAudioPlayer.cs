@@ -14,9 +14,9 @@ namespace Knot.Audio
         [SerializeReference, KnotTypePicker(typeof(IKnotAudioDataProvider))]
         private List<IKnotAudioDataProvider> _audioDataProviders;
 
-        public virtual List<IKnotAudioSourceMod> AudioSourceMods => _audioSourceMods ?? (_audioSourceMods = new List<IKnotAudioSourceMod>());
-        [SerializeReference, KnotTypePicker(typeof(IKnotAudioSourceMod), false)]
-        private List<IKnotAudioSourceMod> _audioSourceMods;
+        public virtual List<IKnotControllerMod> ControllerMods => _controllerMods ?? (_controllerMods = new List<IKnotControllerMod>());
+        [SerializeReference, KnotTypePicker(typeof(IKnotControllerMod), false)]
+        private List<IKnotControllerMod> _controllerMods;
 
         public virtual bool PlayOnAwake
         {
@@ -25,12 +25,12 @@ namespace Knot.Audio
         }
         [SerializeField] private bool _playOnAwake;
 
-        public virtual bool Loop
+        public virtual KnotAudioPlayMode PlayMode
         {
-            get => _loop;
-            set => _loop = value;
+            get => _playMode;
+            set => _playMode = value;
         }
-        [SerializeField] private bool _loop;
+        [SerializeField] private KnotAudioPlayMode _playMode;
 
 
         protected override void Awake()
@@ -52,9 +52,7 @@ namespace Knot.Audio
             if (id < 0 || id >= AudioDataProviders.Count)
                 return;
 
-            if (Loop)
-                AudioDataProviders[id].PlayLoop(AudioSourceMods.ToArray());
-            else AudioDataProviders[id].PlayOnce(AudioSourceMods.ToArray());
+            AudioDataProviders[id].Play(PlayMode, ControllerMods.ToArray());
         }
     }
 }
