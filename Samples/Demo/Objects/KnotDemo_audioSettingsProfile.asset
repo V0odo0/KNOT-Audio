@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a825da2c3e696e42a6b460c8c5eca7c, type: 3}
   m_Name: KnotDemo_audioSettingsProfile
   m_EditorClassIdentifier: 
-  _defaultAudioMixer: {fileID: 0}
-  _defaultSnapshot: {fileID: 0}
+  _defaultAudioMixer: {fileID: 24100000, guid: 4ea1ecdc487c2e742ac720de0aa0ffc0, type: 2}
+  _defaultSnapshot: {fileID: 24500006, guid: 4ea1ecdc487c2e742ac720de0aa0ffc0, type: 2}
   _enableVolumes: 1
   _audioGroups:
   - _name: UI
@@ -27,7 +27,8 @@ MonoBehaviour:
     _mods:
     - id: 5
     - id: 6
-  _audioDataLibraries: []
+  _audioDataLibraries:
+  - {fileID: 11400000, guid: f9857b1b9fb753549b3c9255dc6bb074, type: 2}
   references:
     version: 1
     00000000:

@@ -37,7 +37,7 @@ namespace Knot.Audio
                 return;
 
             var screenPos = Camera.main.WorldToViewportPoint(controller.transform.position);
-            Debug.Log(screenPos);
+            controller.AudioSource.panStereo = PanOverScreenPosCurve.Evaluate(screenPos.x - 0.5f);
         }
     }
 }

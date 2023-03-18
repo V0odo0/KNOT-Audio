@@ -12,6 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b4af1880dab68a42bda8338e90c2d3a, type: 3}
   m_Name: KnotDemo_audioLibrary_UI
   m_EditorClassIdentifier: 
-  _entries: []
+  _entries:
+  - _name: UI/Whoosh
+    _provider:
+      id: 0
+  - _name: UI/ButtonClick
+    _provider:
+      id: 1
   references:
     version: 1
+    00000000:
+      type: {class: KnotInstanceAudioDataProvider, ns: Knot.Audio, asm: Knot.Audio}
+      data:
+        _audioClip: {fileID: 8300000, guid: 391204a3d4a104840acaf70e2d46cce7, type: 3}
+        _group: UI
+        _mods:
+        - id: 2
+    00000001:
+      type: {class: KnotInstanceAudioDataProvider, ns: Knot.Audio, asm: Knot.Audio}
+      data:
+        _audioClip: {fileID: 8300000, guid: f44658ea6de9e7e4fa21e2ec995f613c, type: 3}
+        _group: UI
+        _mods:
+        - id: 3
+    00000002:
+      type: {class: KnotVolumeRangeMod, ns: Knot.Audio, asm: Knot.Audio}
+      data:
+        _min: 0.25
+        _max: 0.25
+    00000003:
+      type: {class: KnotVolumeRangeMod, ns: Knot.Audio, asm: Knot.Audio}
+      data:
+        _min: 1
+        _max: 1

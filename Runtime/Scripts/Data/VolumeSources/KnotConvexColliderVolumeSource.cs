@@ -54,7 +54,7 @@ namespace Knot.Audio
             {
                 Gizmos.DrawMesh(mc.sharedMesh, mc.transform.position, mc.transform.rotation, mc.transform.lossyScale);
             }
-            
+
             Gizmos.color = Color.white;
         }
     }

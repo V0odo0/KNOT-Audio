@@ -20,11 +20,12 @@ namespace Knot.Audio.Demo
         [SerializeField] private float _jumpHeight = 0.5f;
         [SerializeField] private Transform _playerRoot;
 
-
         [Header("Sounds")]
         [SerializeField] private KnotAudioDataReference _footstepSound;
         [SerializeField] private KnotAudioDataReference _windInEarsLoopSound;
 
+
+        private float _airTime;
 
         void Awake()
         {
@@ -42,13 +43,23 @@ namespace Knot.Audio.Demo
             var moveSpeed = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * _moveSpeed;
             CharacterController.SimpleMove(moveSpeed);
 
+            if (CharacterController.isGrounded)
+                _airTime = 0;
+            else _airTime += Time.deltaTime;
+
             Animator.SetFloat("MoveSpeed", CharacterController.velocity.magnitude);
+            Animator.SetBool("IsGrounded", IsGrounded());
         }
 
 
         public void PlayFootstepSound()
         {
+            if (!IsGrounded())
+                return;
+
             _footstepSound.Play().AttachTo(_playerRoot, Vector3.zero);
         }
+
+        public bool IsGrounded() => _airTime < 0.25f;
     }
 }

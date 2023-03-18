@@ -27,11 +27,24 @@ namespace Knot.Audio
 
             (Vector3 closestPoint, float weight) closestSample = (pos, -1f);
 
+            for (int i = 0; i < VolumeSources.Count; i++)
+            {
+                if (VolumeSources[i] == null)
+                    continue;
+
+                if (i == 0)
+                    closestSample = VolumeSources[i].Sample(pos, BlendDistance);
+                else
+                {
+                    var sample = VolumeSources[i].Sample(pos, BlendDistance);
+                    if (sample.weight > closestSample.weight)
+                        closestSample = sample;
+                }
+            }
             foreach (var vs in VolumeSources)
             {
-                var sample = vs.Sample(pos, BlendDistance);
-                if (sample.weight > closestSample.weight)
-                    closestSample = sample;
+                if (vs == null)
+                    continue;
             }
 
             return closestSample;

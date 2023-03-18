@@ -19,7 +19,6 @@ MonoBehaviour:
     - id: 0
     - id: 1
     - id: 2
-    - id: 3
   references:
     version: 1
     00000000:
@@ -38,5 +37,3 @@ MonoBehaviour:
         _start: 0.2
         _end: 0.8
         _trimMode: 0
-    00000003:
-      type: {class: , ns: , asm: }
