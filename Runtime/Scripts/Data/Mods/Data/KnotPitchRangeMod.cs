@@ -42,4 +42,23 @@ namespace Knot.Audio
             controller.AudioSource.pitch = Sample();
         }
     }
+
+    public partial struct KnotAudioControllerHandle
+    {
+        public KnotAudioControllerHandle WithPitch(float pitch)
+        {
+            if (Controller != null)
+                Controller.AppendMods(new KnotPitchRangeMod(pitch));
+
+            return this;
+        }
+
+        public KnotAudioControllerHandle WithPitchRange(float min = 1, float max = 1)
+        {
+            if (Controller != null)
+                Controller.AppendMods(new KnotPitchRangeMod(min, max));
+
+            return this;
+        }
+    }
 }

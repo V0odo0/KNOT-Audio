@@ -51,6 +51,14 @@ namespace Knot.Audio
     
     public partial struct KnotAudioControllerHandle
     {
+        public KnotAudioControllerHandle WithVolume(float volume)
+        {
+            if (Controller != null)
+                Controller.AppendMods(new KnotVolumeRangeMod(volume));
+
+            return this;
+        }
+
         public KnotAudioControllerHandle WithVolumeRange(float min, float max)
         {
             if (Controller != null)

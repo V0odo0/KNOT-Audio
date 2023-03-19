@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Knot.Audio.Attributes;
 using UnityEngine;
 
@@ -51,6 +52,19 @@ namespace Knot.Audio
             return (closestPoint, weight);
         }
 
+        public Bounds CalculateWorldBounds(float maxExpandDistance)
+        {
+            var bounds = new Bounds
+            {
+                min = Bounds.Min(b => b.min),
+                max = Bounds.Max(b => b.max)
+            };
+            foreach (var b in Bounds)
+                bounds.Encapsulate(b);
+
+            bounds.Expand(maxExpandDistance);
+            return bounds;
+        }
 
         public void DrawGizmos()
         {

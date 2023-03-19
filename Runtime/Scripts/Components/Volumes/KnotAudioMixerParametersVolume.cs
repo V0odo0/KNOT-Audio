@@ -11,7 +11,7 @@ namespace Knot.Audio
         [SerializeField] private List<Parameter> _parameters;
 
 
-        public override float GetWeight(Vector3 atPosition) => Parameters.Count == 0 ? 0 : base.GetWeight(atPosition);
+        public override float GetWeight(Vector3 atPosition) => Parameters.Count == 0 ? 0 : Mathf.Clamp(base.GetWeight(atPosition), 0, MaxWeight);
         
 
         [Serializable]

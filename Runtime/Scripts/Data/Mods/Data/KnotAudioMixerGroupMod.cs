@@ -30,4 +30,15 @@ namespace Knot.Audio
             controller.AudioSource.outputAudioMixerGroup = _group;
         }
     }
+
+    public partial struct KnotAudioControllerHandle
+    {
+        public KnotAudioControllerHandle WithAudioMixerGroup(AudioMixerGroup audioMixerGroup)
+        {
+            if (Controller != null)
+                Controller.AppendMods(new KnotAudioMixerGroupMod(audioMixerGroup));
+
+            return this;
+        }
+    }
 }

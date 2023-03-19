@@ -15,4 +15,15 @@ namespace Knot.Audio
             else controller.transform.SetParent(KnotAudio.Manager.transform);
         }
     }
+
+    public partial struct KnotAudioControllerHandle
+    {
+        public KnotAudioControllerHandle DontDestroyOnLoad()
+        {
+            if (Controller != null)
+                Controller.AppendMods(new KnotDontDestroyOnLoadMod());
+
+            return this;
+        }
+    }
 }

@@ -14,6 +14,6 @@ namespace Knot.Audio
         [SerializeField] private AudioMixerSnapshot _snapshot;
 
 
-        public override float GetWeight(Vector3 atPosition) => Snapshot == null ? 0 : base.GetWeight(atPosition);
+        public override float GetWeight(Vector3 atPosition) => Snapshot == null ? 0 : Mathf.Clamp(base.GetWeight(atPosition), 0, MaxWeight);
     }
 }

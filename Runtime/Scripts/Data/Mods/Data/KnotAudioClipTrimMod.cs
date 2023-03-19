@@ -65,4 +65,23 @@ namespace Knot.Audio
             }
         }
     }
+
+    public partial struct KnotAudioControllerHandle
+    {
+        public KnotAudioControllerHandle Trim(float start, float end = float.MaxValue)
+        {
+            if (Controller != null)
+                Controller.AppendMods(new KnotAudioClipTrimMod(start, end));
+
+            return this;
+        }
+
+        public KnotAudioControllerHandle TrimNormalized(float start, float end = float.MaxValue)
+        {
+            if (Controller != null)
+                Controller.AppendMods(new KnotAudioClipTrimMod(start, end, KnotAudioClipTimeMode.Normalized));
+
+            return this;
+        }
+    }
 }

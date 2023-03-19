@@ -77,8 +77,14 @@ namespace Knot.Audio
         {
             if (_playMode == KnotAudioPlayMode.OneShot)
             {
-                Debug.Log($"{AudioSource.isPlaying}  {gameObject.name}");
                 if (!AudioSource.isPlaying)
+                    Destroy(gameObject);
+                else if (AudioSource.pitch >= 0)
+                {
+                    if (AudioSource.time >= TrimEnd)
+                        Destroy(gameObject);
+                }
+                else if (AudioSource.time <= TrimStart)
                     Destroy(gameObject);
             }
             else
@@ -149,7 +155,7 @@ namespace Knot.Audio
             AudioSource.Stop();
             AudioSource.loop = _playMode != KnotAudioPlayMode.OneShot;
 
-            SetPlaybackTime(TrimStart);
+            SetPlaybackTime(AudioSource.pitch > 0 ? TrimStart : TrimEnd);
 
             if (Mathf.Approximately(PlayDelay, 0))
                 AudioSource.Play();

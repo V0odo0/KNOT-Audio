@@ -25,23 +25,17 @@ MonoBehaviour:
       type: {class: KnotInstanceAudioDataProvider, ns: Knot.Audio, asm: Knot.Audio}
       data:
         _audioClip: {fileID: 8300000, guid: 391204a3d4a104840acaf70e2d46cce7, type: 3}
-        _group: UI
+        _groupName: UI
         _mods:
         - id: 2
     00000001:
       type: {class: KnotInstanceAudioDataProvider, ns: Knot.Audio, asm: Knot.Audio}
       data:
         _audioClip: {fileID: 8300000, guid: f44658ea6de9e7e4fa21e2ec995f613c, type: 3}
-        _group: UI
-        _mods:
-        - id: 3
+        _groupName: UI
+        _mods: []
     00000002:
       type: {class: KnotVolumeRangeMod, ns: Knot.Audio, asm: Knot.Audio}
       data:
         _min: 0.25
         _max: 0.25
-    00000003:
-      type: {class: KnotVolumeRangeMod, ns: Knot.Audio, asm: Knot.Audio}
-      data:
-        _min: 1
-        _max: 1

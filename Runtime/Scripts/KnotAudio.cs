@@ -301,22 +301,22 @@ namespace Knot.Audio
                     return;
 
                 _activeSnapshotVolumes.Clear();
-                foreach (var instance in KnotAudioMixerSnapshotVolume.ActiveInstances)
+                foreach (var volume in KnotAudioMixerSnapshotVolume.ActiveInstances)
                 {
-                    if (instance.Snapshot == null)
+                    if (volume.Snapshot == null)
                         continue;
 
-                    var weight = instance.GetWeight(AudioListener.position);
-                    if (_activeSnapshotVolumes.Contains(instance.Snapshot))
+                    var weight = volume.GetWeight(AudioListener.position);
+                    if (_activeSnapshotVolumes.Contains(volume.Snapshot))
                     {
-                        if (_snapshotWeights[instance.Snapshot] > weight)
-                            weight = _snapshotWeights[instance.Snapshot];
+                        if (_snapshotWeights[volume.Snapshot] > weight)
+                            weight = _snapshotWeights[volume.Snapshot];
                     }
-                    else _activeSnapshotVolumes.Add(instance.Snapshot);
+                    else _activeSnapshotVolumes.Add(volume.Snapshot);
 
-                    if (!_snapshotWeights.ContainsKey(instance.Snapshot))
-                        _snapshotWeights.Add(instance.Snapshot, weight);
-                    else _snapshotWeights[instance.Snapshot] = weight;
+                    if (!_snapshotWeights.ContainsKey(volume.Snapshot))
+                        _snapshotWeights.Add(volume.Snapshot, weight);
+                    else _snapshotWeights[volume.Snapshot] = weight;
                 }
 
                 foreach (var snapshot in _snapshotWeights.Keys.ToArray())
@@ -363,6 +363,9 @@ namespace Knot.Audio
             KnotAudioController GetControllerInstance(IEnumerable<IKnotAudioMod> allMods)
             {
                 KnotAudioController controller = null;
+                var playChance = allMods.OfType<KnotPlayChanceMod>().LastOrDefault();
+                if (playChance != null && !playChance.SampleCanPlay())
+                    return null;
                 
                 var instanceLimit = allMods.OfType<KnotInstanceLimitMod>().LastOrDefault();
                 if (instanceLimit != null)

@@ -17,20 +17,13 @@ namespace Knot.Audio.Demo
         [SerializeField] private Vector3 _cameraFollowOffset;
         [SerializeField] private float _cameraFollowSpeed = 5;
         [SerializeField] private float _moveSpeed = 0.1f;
-        [SerializeField] private float _jumpHeight = 0.5f;
         [SerializeField] private Transform _playerRoot;
 
         [Header("Sounds")]
         [SerializeField] private KnotAudioDataReference _footstepSound;
-        [SerializeField] private KnotAudioDataReference _windInEarsLoopSound;
-
 
         private float _airTime;
 
-        void Awake()
-        {
-            _windInEarsLoopSound.Play(KnotAudioPlayMode.Loop).AttachTo(_playerRoot, Vector3.zero);
-        }
 
         void Update()
         {

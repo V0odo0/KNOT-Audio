@@ -1,7 +1,6 @@
 using System;
 using Knot.Audio.Attributes;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 namespace Knot.Audio
 {
@@ -40,6 +39,20 @@ namespace Knot.Audio
             return (closestPoint, weight);
         }
 
+        public Bounds CalculateWorldBounds(float maxExpandDistance)
+        {
+            var bounds = new Bounds
+            {
+                min = Sample(-Vector3.one * 999999).closestPoint,
+                max = Sample(Vector3.one * 999999).closestPoint
+            };
+            bounds.Encapsulate(Sample(-Vector3.one * 999999).closestPoint);
+            bounds.Encapsulate(Sample(Vector3.one * 999999).closestPoint);
+            bounds.Expand(maxExpandDistance);
+
+            return bounds;
+        }
+
         public void DrawGizmos()
         {
             if (Collider == null || !Collider.enabled || Collider is MeshCollider { convex: false })
@@ -48,8 +61,9 @@ namespace Knot.Audio
             Gizmos.color = new Color(1, 1, 0, 0.2f);
             if (Collider is SphereCollider sc)
             {
-                Gizmos.DrawSphere(sc.transform.position, sc.radius * sc.transform.lossyScale.magnitude);
-                Gizmos.DrawWireSphere(sc.transform.position, sc.radius * sc.transform.lossyScale.magnitude);
+                var scale = Mathf.Max(sc.transform.lossyScale.x, sc.transform.lossyScale.y, sc.transform.lossyScale.z);
+                Gizmos.DrawSphere(sc.transform.position, sc.radius * scale);
+                Gizmos.DrawWireSphere(sc.transform.position, sc.radius * scale);
             }
             else if (Collider is MeshCollider mc && mc.sharedMesh != null)
             {

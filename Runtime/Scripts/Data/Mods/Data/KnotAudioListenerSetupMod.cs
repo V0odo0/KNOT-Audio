@@ -6,7 +6,7 @@ using UnityEngine.Scripting.APIUpdating;
 namespace Knot.Audio
 {
     [Serializable]
-    [KnotTypeInfo("Audio Listener Setup")]
+    [KnotTypeInfo("AudioListener Setup")]
     [MovedFrom(true, sourceClassName: "KnotAudioListenerConfigMod")]
     public class KnotAudioListenerSetupMod : IKnotAudioDataMod, IKnotAudioGroupMod
     {

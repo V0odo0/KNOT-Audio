@@ -42,4 +42,23 @@ namespace Knot.Audio
             controller.PlayDelay = Sample();
         }
     }
+
+    public partial struct KnotAudioControllerHandle
+    {
+        public KnotAudioControllerHandle WithDelay(float delay)
+        {
+            if (Controller != null)
+                Controller.AppendMods(new KnotDelayRangeMod(delay));
+
+            return this;
+        }
+
+        public KnotAudioControllerHandle WithDelayRange(float min = 1, float max = 1)
+        {
+            if (Controller != null)
+                Controller.AppendMods(new KnotDelayRangeMod(min, max));
+
+            return this;
+        }
+    }
 }

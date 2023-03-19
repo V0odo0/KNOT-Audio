@@ -32,4 +32,15 @@ namespace Knot.Audio
             Area.Attach(controller.AudioSource);
         }
     }
+
+    public partial struct KnotAudioControllerHandle
+    {
+        public KnotAudioControllerHandle AtArea(KnotAudioSourceArea area)
+        {
+            if (Controller != null && area != null)
+                Controller.AppendMods(new KnotSetAudioSourceAreaMod(area));
+
+            return this;
+        }
+    }
 }

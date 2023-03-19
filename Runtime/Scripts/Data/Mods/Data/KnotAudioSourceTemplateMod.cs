@@ -68,4 +68,15 @@ namespace Knot.Audio
             }
         }*/
     }
+
+    public partial struct KnotAudioControllerHandle
+    {
+        public KnotAudioControllerHandle FromTemplate(AudioSource template)
+        {
+            if (Controller != null && template != null)
+                Controller.AppendMods(new KnotAudioSourceTemplateMod(template));
+
+            return this;
+        }
+    }
 }
