@@ -6,7 +6,7 @@ namespace Knot.Audio
 {
     public abstract class KnotAudioController : KnotTrackedMonoBehaviour<KnotAudioController>
     {
-        public abstract double InstanceCreationTimestamp { get; }
+        internal double InstanceCreationTimestamp { get; private set; }
 
         public virtual AudioSource AudioSource =>
             (_audioSource ?? (_audioSource = GetComponent<AudioSource>())) ??
@@ -18,11 +18,21 @@ namespace Knot.Audio
         public abstract float TrimStart { get; set; }
         public abstract float TrimEnd { get; set; }
 
+        public abstract List<IKnotAudioMod> Mods { get; }
 
-        public abstract KnotAudioController Setup(IKnotAudioData audioData, IEnumerable<IKnotAudioMod> mods);
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            InstanceCreationTimestamp = Time.realtimeSinceStartupAsDouble;
+        }
+
+
+        public abstract KnotAudioController Initialize(IKnotAudioData audioData, KnotAudioPlayMode playMode);
+
+        public abstract KnotAudioController SetupMods();
 
         public abstract KnotAudioController AppendMods(params IKnotAudioMod[] mods);
-
-        public abstract KnotAudioController Play(KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot);
     }
 }

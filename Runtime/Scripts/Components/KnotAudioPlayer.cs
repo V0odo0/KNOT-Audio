@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Knot.Audio.Attributes;
 using UnityEngine;
 
@@ -9,12 +8,16 @@ namespace Knot.Audio
     [AddComponentMenu(KnotAudio.CoreName + "/Audio Player", 0)]
     public class KnotAudioPlayer : KnotTrackedMonoBehaviour<KnotAudioPlayer>
     {
-        public virtual List<IKnotAudioDataProvider> AudioDataProviders =>
-            _audioDataProviders ?? (_audioDataProviders = new List<IKnotAudioDataProvider>());
+        public virtual IKnotAudioDataProvider AudioDataProvider
+        {
+            get => _audioDataProvider;
+            set => _audioDataProvider = value;
+        }
         [SerializeReference, KnotTypePicker(typeof(IKnotAudioDataProvider))]
-        private List<IKnotAudioDataProvider> _audioDataProviders;
+        private IKnotAudioDataProvider _audioDataProvider = new KnotInstanceAudioDataProvider();
 
-        public virtual List<IKnotControllerMod> ControllerMods => _controllerMods ?? (_controllerMods = new List<IKnotControllerMod>());
+        public virtual List<IKnotControllerMod> ControllerMods => 
+            _controllerMods ?? (_controllerMods = new List<IKnotControllerMod>());
         [SerializeReference, KnotTypePicker(typeof(IKnotControllerMod), false)]
         private List<IKnotControllerMod> _controllerMods;
 
@@ -42,17 +45,28 @@ namespace Knot.Audio
         }
 
 
-        public virtual void Play()
+        public virtual void Play() => PlayGetHandle();
+
+        public virtual KnotAudioControllerHandle PlayGetHandle()
         {
-            Play(0);
+            return AudioDataProvider?.Play(PlayMode, ControllerMods.ToArray()) ?? default;
         }
 
-        public virtual void Play(int id)
-        {
-            if (id < 0 || id >= AudioDataProviders.Count)
-                return;
+        public virtual void PlayVariant(int variantId) => PlayVariantGetHandle(variantId);
 
-            AudioDataProviders[id].Play(PlayMode, ControllerMods.ToArray());
+        public virtual KnotAudioControllerHandle PlayVariantGetHandle(int variantId)
+        {
+            if (variantId < 0 || AudioDataProvider == null)
+                return default;
+            
+            if (AudioDataProvider is KnotAssetAudioDataVariantProvider assetVariant && variantId < assetVariant.Variants.Count)
+                return assetVariant.Variants[variantId]?.AudioData?.Play(PlayMode, ControllerMods.ToArray()) ?? default;
+            if (AudioDataProvider is KnotLibraryEntryVariantProvider libraryVariant && variantId < libraryVariant.Variants.Count)
+                return libraryVariant.Variants[variantId]?.AudioData?.Play(PlayMode, ControllerMods.ToArray()) ?? default;
+            if (AudioDataProvider is KnotInstanceAudioDataVariantProvider instanceVariant && variantId < instanceVariant.Variants.Count)
+                return instanceVariant.Variants[variantId]?.AudioData?.Play(PlayMode, ControllerMods.ToArray()) ?? default;
+
+            return default;
         }
     }
 }

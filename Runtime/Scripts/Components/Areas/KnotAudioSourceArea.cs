@@ -65,10 +65,9 @@ namespace Knot.Audio
 
                 if (ControlSpread)
                 {
-                    var spreadBlend = _spreadBlendCurve.Evaluate(sample.weight);
+                    var spreadBlend = SpreadBlendCurve.Evaluate(sample.weight);
                     a.Key.spread = Mathf.Lerp(a.Value.BaseSpread, 180, spreadBlend);
                 }
-
             }
         }
 

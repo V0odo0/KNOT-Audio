@@ -38,7 +38,7 @@ namespace Knot.Audio
             Vector3 closestPoint = pos;
             foreach (var bound in Bounds)
             {
-                var cp = (Pivot == null ? bound : new Bounds(Pivot.position, bound.size)).ClosestPoint(pos);
+                var cp = (Pivot == null ? bound : new Bounds(bound.center + Pivot.position, bound.size)).ClosestPoint(pos);
                 var d = (cp - pos).sqrMagnitude;
                 if (d < outDst)
                 {
@@ -57,11 +57,12 @@ namespace Knot.Audio
             if (Bounds.Count == 0)
                 return;
 
-            Gizmos.color = new Color(0, 1, 0, 0.1f);
+            Gizmos.color = new Color(1, 1, 0, 0.2f);
             foreach (var b in Bounds)
             {
                 var localBound = Pivot == null ? b : new Bounds(Pivot.TransformPoint(b.center), b.size);
                 Gizmos.DrawCube(localBound.center, localBound.size);
+                Gizmos.DrawWireCube(localBound.center, localBound.size);
             }
             Gizmos.color = Color.white;
         }

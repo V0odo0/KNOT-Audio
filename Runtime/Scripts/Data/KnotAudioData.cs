@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Knot.Audio.Attributes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Knot.Audio
 {
@@ -15,12 +16,13 @@ namespace Knot.Audio
         }
         [SerializeField] private AudioClip _audioClip;
 
-        public string Group
+        public string GroupName
         {
-            get => _group;
-            set => _group = value;
+            get => _groupName;
+            set => _groupName = value;
         }
-        [SerializeField, KnotAudioGroupNamePicker] private string _group;
+        [FormerlySerializedAs("_group")]
+        [SerializeField, KnotAudioGroupNamePicker] private string _groupName;
 
         public IList<IKnotAudioDataMod> Mods => _mods ?? (_mods = new List<IKnotAudioDataMod>());
         [SerializeReference, KnotTypePicker(typeof(IKnotAudioDataMod), false)] private List<IKnotAudioDataMod> _mods;
@@ -38,7 +40,7 @@ namespace Knot.Audio
         public KnotAudioData(AudioClip audioClip, string group, params IKnotAudioDataMod[] audioDataMods)
         {
             _audioClip = audioClip;
-            _group = group;
+            _groupName = group;
             foreach (var m in audioDataMods)
                 Mods.Add(m);
         }

@@ -22,7 +22,9 @@ namespace Knot.Audio.Demo
 
         void Awake()
         {
-            _allTipsText.text = new string('!', _tipPanels.Length);
+            _allTipsText.text = new string('•', _tipPanels.Length);
+            foreach (var p in _tipPanels)
+                p.gameObject.SetActive(false);
         }
 
         public void ShowTipPanel(int id)
@@ -33,12 +35,7 @@ namespace Knot.Audio.Demo
             _tipPanels[id].gameObject.SetActive(true);
             KnotDemoGameManager.Instance.TipsCollected.Add(id);
 
-            if (_tipsCollectedText != null)
-            {
-                _tipsCollectedText.text = new string('!', KnotDemoGameManager.Instance.TipsCollected.Count);
-                _tipsCollectedText.enabled = false;
-                _tipsCollectedText.enabled = true;
-            }
+            _tipsCollectedText.text = new string('•', KnotDemoGameManager.Instance.TipsCollected.Count);
 
             _openTipPanelSound.Play();
         }

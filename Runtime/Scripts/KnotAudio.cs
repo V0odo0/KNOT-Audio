@@ -162,12 +162,18 @@ namespace Knot.Audio
         public static KnotAudioControllerHandle Play(this IKnotAudioData data, KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot, params IKnotAudioMod[] mods) =>
             Manager == null ? default : Manager.Play(data, playMode, mods);
 
-        public static KnotAudioControllerHandle Play(this AudioClip clip, KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot, params IKnotAudioMod[] mods) =>
+        public static KnotAudioControllerHandle Play(this AudioClip clip, KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot,  params IKnotAudioMod[] mods) =>
             Manager == null ? default : Manager.Play(clip, playMode, mods);
+
+        public static KnotAudioControllerHandle Play(this AudioClip clip, string audioGroupName, KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot, params IKnotAudioMod[] mods) =>
+            Manager == null ? default : Manager.Play(clip, audioGroupName, playMode, mods);
 
         public static KnotAudioControllerHandle Play(string libraryEntryName, KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot, params IKnotAudioMod[] mods) =>
             Manager == null ? default : Manager.Play(libraryEntryName, playMode, mods);
 
+
+        public static IEnumerable<IKnotAudioGroupMod> GetAudioGroupMods(string groupName) =>
+            Manager == null ? Array.Empty<IKnotAudioGroupMod>() : Manager.GetAudioGroupMods(groupName);
 
         public static KnotAudioGroup GetAudioGroup(string groupName)
         {
@@ -349,9 +355,9 @@ namespace Knot.Audio
                 }
             }
 
-            IEnumerable<IKnotAudioMod> GetGroupMods(string groupName)
+            public IEnumerable<IKnotAudioGroupMod> GetAudioGroupMods(string groupName)
             {
-                return GetAudioGroup(groupName)?.Mods.Cast<IKnotAudioMod>() ?? Array.Empty<IKnotAudioMod>();
+                return GetAudioGroup(groupName)?.Mods?.OfType<IKnotAudioGroupMod>() ?? Array.Empty<IKnotAudioGroupMod>();
             }
 
             KnotAudioController GetControllerInstance(IEnumerable<IKnotAudioMod> allMods)
@@ -448,11 +454,10 @@ namespace Knot.Audio
             
             public KnotAudioControllerHandle Play(string libraryEntryName, KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot, params IKnotAudioMod[] mods)
             {
-                if (string.IsNullOrEmpty(libraryEntryName))
-                    return default;
-
                 var entry = GetLibraryEntry(libraryEntryName);
-                return entry == null ? default : Play(entry, playMode, mods);
+                return entry == null ? 
+                    default : 
+                    Play(entry, playMode, mods);
             }
 
             public KnotAudioControllerHandle Play(IKnotAudioData data, KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot, params IKnotAudioMod[] mods)
@@ -460,15 +465,27 @@ namespace Knot.Audio
                 if (data == null || data.AudioClip == null)
                     return default;
 
-                var allMods = GetGroupMods(data.Group).Union(data.GetAllMods().Union(mods));
-                var controller = GetControllerInstance(allMods);
-                return controller == null ? default : new KnotAudioControllerHandle(controller.Setup(data, mods).Play(playMode));
+                var controller = GetControllerInstance(GetAudioGroupMods(data.GroupName).Union(data.GetAllMods().Union(mods)));
+                return controller == null ? 
+                    default : 
+                    new KnotAudioControllerHandle(controller.Initialize(data, playMode).AppendMods(mods));
             }
 
             public KnotAudioControllerHandle Play(AudioClip clip, KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot, params IKnotAudioMod[] mods)
             {
                 var controller = GetControllerInstance(mods);
-                return controller == null ? default : new KnotAudioControllerHandle(controller.Setup(new KnotAudioData(clip), mods).Play(playMode));
+                return controller == null ? 
+                    default : 
+                    new KnotAudioControllerHandle(controller.Initialize(new KnotAudioData(clip), playMode).AppendMods(mods));
+            }
+
+            public KnotAudioControllerHandle Play(AudioClip clip, string audioGroupName, KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot, params IKnotAudioMod[] mods)
+            {
+                var allMods = GetAudioGroupMods(audioGroupName).Union(mods);
+                var controller = GetControllerInstance(allMods);
+                return controller == null ? 
+                    default : 
+                    new KnotAudioControllerHandle(controller.Initialize(new KnotAudioData(clip, audioGroupName), playMode).AppendMods(mods));
             }
         }
     }

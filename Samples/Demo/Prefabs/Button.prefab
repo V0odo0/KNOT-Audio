@@ -167,8 +167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c1ab7a448008f4799334bf364d51d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _audioDataProviders:
-  - id: 0
+  _audioDataProvider:
+    id: 0
   _controllerMods: []
   _playOnAwake: 0
   _playMode: 0

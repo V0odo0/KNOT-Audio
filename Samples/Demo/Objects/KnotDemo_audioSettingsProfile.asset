@@ -27,6 +27,7 @@ MonoBehaviour:
     _mods:
     - id: 5
     - id: 6
+    - id: 7
   _audioDataLibraries:
   - {fileID: 11400000, guid: f9857b1b9fb753549b3c9255dc6bb074, type: 2}
   references:
@@ -63,3 +64,7 @@ MonoBehaviour:
       data:
         _instanceLimit: 100
         _limitSolveMethod: 2
+    00000007:
+      type: {class: KnotSpatialBlendMod, ns: Knot.Audio, asm: Knot.Audio}
+      data:
+        _value: 1

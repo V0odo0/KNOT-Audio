@@ -46,6 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tipId: 0
+  _renderer: {fileID: 1565023751403865133}
+  _isCollectedMaterial: {fileID: 2100000, guid: 8f3604b72d488a54c8f933d782ab8eea,
+    type: 2}
 --- !u!135 &1565023750419542945
 SphereCollider:
   m_ObjectHideFlags: 0

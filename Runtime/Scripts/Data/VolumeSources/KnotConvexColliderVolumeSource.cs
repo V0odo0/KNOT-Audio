@@ -45,14 +45,16 @@ namespace Knot.Audio
             if (Collider == null || !Collider.enabled || Collider is MeshCollider { convex: false })
                 return;
 
-            Gizmos.color = new Color(0, 1, 0, 0.1f);
+            Gizmos.color = new Color(1, 1, 0, 0.2f);
             if (Collider is SphereCollider sc)
             {
                 Gizmos.DrawSphere(sc.transform.position, sc.radius * sc.transform.lossyScale.magnitude);
+                Gizmos.DrawWireSphere(sc.transform.position, sc.radius * sc.transform.lossyScale.magnitude);
             }
             else if (Collider is MeshCollider mc && mc.sharedMesh != null)
             {
                 Gizmos.DrawMesh(mc.sharedMesh, mc.transform.position, mc.transform.rotation, mc.transform.lossyScale);
+                Gizmos.DrawWireMesh(mc.sharedMesh, mc.transform.position, mc.transform.rotation, mc.transform.lossyScale);
             }
 
             Gizmos.color = Color.white;

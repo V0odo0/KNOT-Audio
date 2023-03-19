@@ -9,9 +9,6 @@ namespace Knot.Audio
     [DisallowMultipleComponent]
     public class KnotNativeAudioController : KnotAudioController
     {
-        public override double InstanceCreationTimestamp => _instanceCreationTimestamp;
-        private double _instanceCreationTimestamp;
-
         public override float MaxVolume
         {
             get => Mathf.Clamp01(_maxVolume);
@@ -40,28 +37,27 @@ namespace Knot.Audio
         }
         private float _trimEnd = float.MaxValue;
 
-        protected IEnumerable<IKnotAudioMod> AllMods => _setupMods.Union(_appendMods);
+        public override List<IKnotAudioMod> Mods => _mods ?? (_mods = new List<IKnotAudioMod>());
+        private List<IKnotAudioMod> _mods = new List<IKnotAudioMod>();
 
-        private List<IKnotPlaybackBehaviourMod> _attachedPlaybackBehaviours = new List<IKnotPlaybackBehaviourMod>();
         private IKnotAudioData _audioData;
-        private List<IKnotAudioMod> _setupMods = new List<IKnotAudioMod>();
-        private List<IKnotAudioMod> _appendMods = new List<IKnotAudioMod>();
+        private List<IKnotPlaybackBehaviourMod> _attachedPlaybackBehaviours = new List<IKnotPlaybackBehaviourMod>();
         private KnotAudioPlayMode _playMode;
-        private float _lastLoopPlaybackTime;
+        private float _lastPlaybackTime;
 
 
-        protected override void Awake()
+        protected virtual void Start()
         {
-            base.Awake();
-
-            AudioSource.playOnAwake = false;
-            _instanceCreationTimestamp = Time.realtimeSinceStartupAsDouble;
+            if (_audioData != null)
+            {
+                SetupMods();
+                Play();
+            }
         }
 
         protected virtual void Update()
         {
-            UpdatePlayTime();
-
+            UpdatePlayback();
             InvokePlaybackBehavioursEvent(KnotPlaybackBehaviourEvent.Update);
         }
 
@@ -77,50 +73,48 @@ namespace Knot.Audio
             InvokePlaybackBehavioursEvent(KnotPlaybackBehaviourEvent.Detach);
         }
 
-        protected virtual void UpdatePlayTime()
+        protected virtual void UpdatePlayback()
         {
-            if (AudioSource.loop)
+            if (_playMode == KnotAudioPlayMode.OneShot)
             {
-                if (_playMode == KnotAudioPlayMode.Loop)
-                {
-                    if (AudioSource.time < TrimStart)
-                        SetTimeForClip(TrimStart);
-                    else if (AudioSource.time >= TrimEnd)
-                        SetTimeForClip(TrimStart);
-                }
-                else if (_playMode == KnotAudioPlayMode.LoopSetupPerCycle)
-                {
-                    bool isLoopCycleEnded = false;
-                    if (AudioSource.time < TrimStart)
-                        SetTimeForClip(TrimStart);
-                    else if (AudioSource.time >= TrimEnd)
-                    {
-                        isLoopCycleEnded = true;
-                        SetTimeForClip(TrimStart);
-                    }
-                    else if (_lastLoopPlaybackTime > AudioSource.time)
-                        isLoopCycleEnded = true;
-
-                    if (isLoopCycleEnded)
-                        Setup(_audioData, _setupMods);
-                }
-
-                _lastLoopPlaybackTime = AudioSource.time;
+                Debug.Log($"{AudioSource.isPlaying}  {gameObject.name}");
+                if (!AudioSource.isPlaying)
+                    Destroy(gameObject);
             }
             else
             {
-                if (_playMode == KnotAudioPlayMode.OneShot && (!AudioSource.isPlaying || AudioSource.time >= TrimEnd))
-                    Destroy(gameObject);
+                if (AudioSource.pitch >= 0)
+                {
+                    if (_playMode == KnotAudioPlayMode.LoopSetupPerCycle && AudioSource.time < _lastPlaybackTime)
+                        SetupMods();
+
+                    if (AudioSource.time < TrimStart)
+                        SetPlaybackTime(TrimStart);
+                    else if (AudioSource.time >= TrimEnd)
+                        SetPlaybackTime(TrimStart);
+                }
+                else
+                {
+                    if (_playMode == KnotAudioPlayMode.LoopSetupPerCycle && AudioSource.time > _lastPlaybackTime)
+                        SetupMods();
+
+                    if (AudioSource.time < TrimStart)
+                        SetPlaybackTime(TrimEnd);
+                    else if (AudioSource.time >= TrimEnd)
+                        SetPlaybackTime(TrimEnd);
+                }
+
+                _lastPlaybackTime = AudioSource.time;
             }
         }
 
-        protected virtual void SetTimeForClip(float t)
+        protected virtual void SetPlaybackTime(float t)
         {
             if (AudioSource.clip == null)
                 return;
 
-            t = Mathf.Clamp(t, 0, AudioSource.clip.length);
-            AudioSource.time = t;
+            AudioSource.time = Mathf.Clamp(t, 0, AudioSource.clip.length);
+            _lastPlaybackTime = AudioSource.time;
         }
 
         protected virtual void InvokePlaybackBehavioursEvent(KnotPlaybackBehaviourEvent behaviourEvent)
@@ -140,7 +134,6 @@ namespace Knot.Audio
                     continue;
 
                 var instance = pb.GetInstance(this);
-                _attachedPlaybackBehaviours.Add(instance);
                 instance.OnBehaviourStateEvent(KnotPlaybackBehaviourEvent.Attach, this);
             }
         }
@@ -151,70 +144,56 @@ namespace Knot.Audio
                 pb.OnBehaviourStateEvent(KnotPlaybackBehaviourEvent.Detach, this);
         }
 
-        internal void UpdateAudioSourceName()
+        protected virtual void Play()
         {
-            gameObject.name = $"{KnotAudio.CoreName}: {(AudioSource.clip == null ? "Empty" : AudioSource.clip.name)}";
-        }
+            AudioSource.Stop();
+            AudioSource.loop = _playMode != KnotAudioPlayMode.OneShot;
 
+            SetPlaybackTime(TrimStart);
+
+            if (Mathf.Approximately(PlayDelay, 0))
+                AudioSource.Play();
+            else AudioSource.PlayDelayed(PlayDelay);
+        }
         
-        public override KnotAudioController Setup(IKnotAudioData audioData, IEnumerable<IKnotAudioMod> mods)
+        
+        public override KnotAudioController Initialize(IKnotAudioData audioData, KnotAudioPlayMode playMode)
         {
-            if (audioData == null || audioData.AudioClip == null)
+            if (audioData == null || _audioData == audioData)
                 return this;
 
             _audioData = audioData;
+            _playMode = playMode;
+            
             AudioSource.playOnAwake = false;
             AudioSource.clip = audioData.AudioClip;
-
-            _setupMods.Clear();
-
+            
+            Mods.Clear();
+            Mods.AddRange(KnotAudio.GetAudioGroupMods(audioData.GroupName));
+            Mods.AddRange(audioData.GetAllMods());
+            
+            gameObject.name = $"{KnotAudio.CoreName}: {(AudioSource.clip == null ? "Empty" : AudioSource.clip.name)}";
+            
+            return this;
+        }
+        
+        public override KnotAudioController SetupMods()
+        {
             DetachPlaybackBehaviours(_attachedPlaybackBehaviours);
             _attachedPlaybackBehaviours.Clear();
 
-            var audioGroup = KnotAudio.GetAudioGroup(audioData.Group);
-            if (audioGroup != null)
-                _setupMods.AddRange(audioGroup.Mods);
-            _setupMods.AddRange(audioData.GetAllMods());
-            _setupMods.AddRange(mods);
-            
-            foreach (var mod in AllMods)
+            foreach (var mod in Mods)
                 mod?.Setup(this);
 
-            AttachPlaybackBehaviours(AllMods.OfType<IKnotPlaybackBehaviourMod>());
-            UpdateAudioSourceName();
+            _attachedPlaybackBehaviours.AddRange(Mods.OfType<IKnotPlaybackBehaviourMod>());
+            AttachPlaybackBehaviours(_attachedPlaybackBehaviours);
 
             return this;
         }
 
         public override KnotAudioController AppendMods(params IKnotAudioMod[] mods)
         {
-            var prevClip = AudioSource.clip;
-
-            _appendMods.AddRange(mods);
-            foreach (var mod in _appendMods)
-                mod?.Setup(this);
-
-            AttachPlaybackBehaviours(mods.OfType<IKnotPlaybackBehaviourMod>());
-
-            if (AudioSource.clip != prevClip)
-                UpdateAudioSourceName();
-            
-            return this;
-        }
-
-        public override KnotAudioController Play(KnotAudioPlayMode playMode = KnotAudioPlayMode.OneShot)
-        {
-            _playMode = playMode;
-            _lastLoopPlaybackTime = 0;
-
-            AudioSource.loop = playMode != KnotAudioPlayMode.OneShot;
-
-            SetTimeForClip(TrimStart);
-
-            if (Mathf.Approximately(PlayDelay, 0))
-                AudioSource.Play();
-            else AudioSource.PlayDelayed(PlayDelay);
-
+            Mods.AddRange(mods.Where(m => m != null && !Mods.Contains(m)));
             return this;
         }
     }
