@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Knot.Audio
 {
-    public interface IKnotControllerMod : IKnotAudioMod
+    public interface IKnotControllerMod : IKnotAudioDataMod
     {
         
     }

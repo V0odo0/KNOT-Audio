@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Knot.Audio.Attributes;
 using UnityEngine;
 
@@ -44,6 +45,13 @@ namespace Knot.Audio
                 Play();
         }
 
+
+        protected virtual void Reset()
+        {
+            AudioDataProvider = new KnotInstanceAudioDataProvider();
+            ControllerMods.Add(new KnotSetParentMod(transform));
+            PlayOnAwake = true;
+        }
 
         public virtual void Play() => PlayGetHandle();
 

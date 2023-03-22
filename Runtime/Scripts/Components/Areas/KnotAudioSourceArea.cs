@@ -31,14 +31,18 @@ namespace Knot.Audio
             new Dictionary<AudioSource, AudioSourceSettings>();
 
 
-        protected virtual void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
+
             foreach (var audioSource in AudioSources)
                 Attach(audioSource);
         }
 
-        protected virtual void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
+
             foreach (var audioSource in AudioSources)
                 Detach(audioSource);
         }

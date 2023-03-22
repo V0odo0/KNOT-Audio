@@ -18,27 +18,13 @@ namespace Knot.Audio
             set => _boundsUpdateMode = value;
         }
         [SerializeField] private KnotVolumeBoundsUpdateMode _boundsUpdateMode = KnotVolumeBoundsUpdateMode.EveryFrame;
-
-        public float MaxWeight
-        {
-            get => Mathf.Clamp01(_maxWeight);
-            set => _maxWeight = value;
-        }
-        [SerializeField, Range(0f, 1f)] private float _maxWeight = 1f;
-
+        
         public float BlendDistance
         {
             get => Mathf.Clamp(_blendDistance, 0, float.MaxValue);
             set => _blendDistance = value;
         }
         [SerializeField, Min(0)] private float _blendDistance;
-
-        public bool InverseVolume
-        {
-            get => _inverseVolume;
-            set => _inverseVolume = value;
-        }
-        [SerializeField] private bool _inverseVolume;
 
 
         private Bounds _currentWorldBounds;
@@ -62,24 +48,24 @@ namespace Knot.Audio
         public virtual float GetWeight(Vector3 atPosition)
         {
             if (!enabled || VolumeSources.Count == 0 || !_currentWorldBounds.Contains(atPosition))
-                return InverseVolume ? 1 : 0;
+                return 0;
 
-            var maxWeight = VolumeSources.Where(s => s != null).Select(s => s.Sample(atPosition, BlendDistance))
-                .Max(t => t.weight);
-            return InverseVolume ? 1 - maxWeight : maxWeight;
+            var maxWeight = VolumeSources.Where(s => s != null).Select(s => s.Sample(atPosition, BlendDistance)).Max(t => t.weight);
+            return maxWeight;
         }
 
         public virtual void UpdateWorldBounds()
         {
             var maxExpandDst = GetMaxBoundsExpandDistance();
 
-            _currentWorldBounds = new Bounds();
-            foreach (var vs in VolumeSources)
+            _currentWorldBounds = VolumeSources.FirstOrDefault(s => s != null)?.CalculateWorldBounds(maxExpandDst) ?? new Bounds();
+            foreach (var vs in VolumeSources.Where(s => s != null))
             {
-                if (vs == null)
+                var b = vs.CalculateWorldBounds(maxExpandDst);
+                if (b == default)
                     continue;
 
-                _currentWorldBounds.Encapsulate(vs.CalculateWorldBounds(maxExpandDst));
+                _currentWorldBounds.Encapsulate(b);
             }
         }
 
@@ -92,6 +78,9 @@ namespace Knot.Audio
             {
                 foreach (var vs in VolumeSources)
                     vs?.DrawGizmos();
+
+                if (!Application.isPlaying)
+                    UpdateWorldBounds();
 
                 Gizmos.color = new Color(1, 1, 0, 0.5f);
                 Gizmos.DrawWireCube(_currentWorldBounds.center, _currentWorldBounds.size);

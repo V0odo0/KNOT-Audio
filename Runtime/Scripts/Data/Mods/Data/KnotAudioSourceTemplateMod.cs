@@ -23,7 +23,7 @@ namespace Knot.Audio
             _template = template;
         }
 
-        public void Setup(KnotAudioController controller)
+        public void Setup(KnotAudioControllerBase controller)
         {
             
         }

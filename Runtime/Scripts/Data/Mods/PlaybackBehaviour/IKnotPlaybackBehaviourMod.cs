@@ -6,8 +6,8 @@ namespace Knot.Audio
 {
     public interface IKnotPlaybackBehaviourMod : IKnotAudioDataMod
     {
-        IKnotPlaybackBehaviourMod GetInstance(KnotAudioController controller);
+        IKnotPlaybackBehaviourMod GetInstance(KnotAudioControllerBase controller);
 
-        void OnBehaviourStateEvent(KnotPlaybackBehaviourEvent behaviourEvent, KnotAudioController controller);
+        void OnBehaviourStateEvent(KnotPlaybackBehaviourEvent behaviourEvent, KnotAudioControllerBase controller);
     }
 }

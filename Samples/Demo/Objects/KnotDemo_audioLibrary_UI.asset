@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: KnotDemo_audioLibrary_UI
   m_EditorClassIdentifier: 
   _entries:
-  - _name: UI/Whoosh
+  - _name: UI/ButtonClick
     _provider:
       id: 0
-  - _name: UI/ButtonClick
+  - _name: UI/Whoosh
     _provider:
       id: 1
   references:
@@ -24,16 +24,16 @@ MonoBehaviour:
     00000000:
       type: {class: KnotInstanceAudioDataProvider, ns: Knot.Audio, asm: Knot.Audio}
       data:
+        _audioClip: {fileID: 8300000, guid: f44658ea6de9e7e4fa21e2ec995f613c, type: 3}
+        _groupName: UI
+        _mods: []
+    00000001:
+      type: {class: KnotInstanceAudioDataProvider, ns: Knot.Audio, asm: Knot.Audio}
+      data:
         _audioClip: {fileID: 8300000, guid: 391204a3d4a104840acaf70e2d46cce7, type: 3}
         _groupName: UI
         _mods:
         - id: 2
-    00000001:
-      type: {class: KnotInstanceAudioDataProvider, ns: Knot.Audio, asm: Knot.Audio}
-      data:
-        _audioClip: {fileID: 8300000, guid: f44658ea6de9e7e4fa21e2ec995f613c, type: 3}
-        _groupName: UI
-        _mods: []
     00000002:
       type: {class: KnotVolumeRangeMod, ns: Knot.Audio, asm: Knot.Audio}
       data:

@@ -32,7 +32,7 @@ namespace Knot.Audio
         }
 
 
-        public void Setup(KnotAudioController controller)
+        public void Setup(KnotAudioControllerBase controller)
         {
 
         }

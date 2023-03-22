@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Knot.Audio
 {
     [Serializable]
-    [KnotTypeInfo("Volume Over Time", menuCustomName: "Behaviour/Volume Over Time")]
+    [KnotTypeInfo("Volume Over Time", menuCustomName: "Behaviour/Volume Over Time", order: 1000)]
     public class KnotVolumeOverTimeMod : IKnotPlaybackBehaviourMod
     {
         public AnimationCurve VolumeOverTimeCurve
@@ -23,7 +23,7 @@ namespace Knot.Audio
         [SerializeField] private KnotAudioClipTimeMode _timeMode = KnotAudioClipTimeMode.Normalized;
 
 
-        float GetCurveTime(KnotAudioController controller)
+        float GetCurveTime(KnotAudioControllerBase controller)
         {
             if (TimeMode == KnotAudioClipTimeMode.AbsoluteSeconds || controller.AudioSource.clip == null)
                 return VolumeOverTimeCurve.Evaluate(controller.AudioSource.time);
@@ -32,11 +32,11 @@ namespace Knot.Audio
         }
 
 
-        public void Setup(KnotAudioController controller) { }
+        public void Setup(KnotAudioControllerBase controller) { }
 
-        public IKnotPlaybackBehaviourMod GetInstance(KnotAudioController controller) => this;
+        public IKnotPlaybackBehaviourMod GetInstance(KnotAudioControllerBase controller) => this;
 
-        public void OnBehaviourStateEvent(KnotPlaybackBehaviourEvent behaviourEvent, KnotAudioController controller)
+        public void OnBehaviourStateEvent(KnotPlaybackBehaviourEvent behaviourEvent, KnotAudioControllerBase controller)
         {
             if (VolumeOverTimeCurve == null)
                 return;

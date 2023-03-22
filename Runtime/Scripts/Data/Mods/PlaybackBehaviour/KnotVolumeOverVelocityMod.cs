@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Knot.Audio
 {
     [Serializable]
-    [KnotTypeInfo("Volume Over Velocity", menuCustomName: "Behaviour/Volume Over Velocity")]
+    [KnotTypeInfo("Volume Over Velocity", menuCustomName: "Behaviour/Volume Over Velocity", order: 1000)]
     public class KnotVolumeOverVelocityMod : IKnotPlaybackBehaviourMod
     {
         public AnimationCurve VolumeOverVelocityCurve
@@ -35,14 +35,14 @@ namespace Knot.Audio
         }
 
 
-        public void Setup(KnotAudioController controller) { }
+        public void Setup(KnotAudioControllerBase controller) { }
 
-        public IKnotPlaybackBehaviourMod GetInstance(KnotAudioController controller)
+        public IKnotPlaybackBehaviourMod GetInstance(KnotAudioControllerBase controller)
         {
             return new KnotVolumeOverVelocityMod(VolumeOverVelocityCurve);
         }
 
-        public void OnBehaviourStateEvent(KnotPlaybackBehaviourEvent behaviourEvent, KnotAudioController controller)
+        public void OnBehaviourStateEvent(KnotPlaybackBehaviourEvent behaviourEvent, KnotAudioControllerBase controller)
         {
             if (VolumeOverVelocityCurve == null)
                 return;

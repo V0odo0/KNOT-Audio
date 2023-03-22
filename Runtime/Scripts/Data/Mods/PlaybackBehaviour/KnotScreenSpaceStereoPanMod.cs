@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Knot.Audio
 {
     [Serializable]
-    [KnotTypeInfo("Screen Space Stereo Pan", menuCustomName: "Behaviour/Screen Space Stereo Pan")]
+    [KnotTypeInfo("Screen Space Stereo Pan", menuCustomName: "Behaviour/Screen Space Stereo Pan", order:1000)]
     public class KnotScreenSpaceStereoPanMod : IKnotPlaybackBehaviourMod
     {
         public AnimationCurve PanOverScreenPosCurve
@@ -24,14 +24,14 @@ namespace Knot.Audio
         }
 
 
-        public void Setup(KnotAudioController controller) { }
+        public void Setup(KnotAudioControllerBase controller) { }
 
-        public IKnotPlaybackBehaviourMod GetInstance(KnotAudioController controller)
+        public IKnotPlaybackBehaviourMod GetInstance(KnotAudioControllerBase controller)
         {
             return this;
         }
 
-        public void OnBehaviourStateEvent(KnotPlaybackBehaviourEvent behaviourEvent, KnotAudioController controller)
+        public void OnBehaviourStateEvent(KnotPlaybackBehaviourEvent behaviourEvent, KnotAudioControllerBase controller)
         {
             if (Camera.main == null || PanOverScreenPosCurve == null)
                 return;

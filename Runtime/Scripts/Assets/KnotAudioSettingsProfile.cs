@@ -11,12 +11,16 @@ namespace Knot.Audio
     {
         public AudioMixer DefaultAudioMixer => _defaultAudioMixer;
         [SerializeField] protected AudioMixer _defaultAudioMixer;
+        
+        public bool AudioMixerParameterVolumes => _audioMixerParameterVolumes;
+        [SerializeField] protected bool _audioMixerParameterVolumes = true;
 
         public AudioMixerSnapshot DefaultSnapshot => _defaultSnapshot;
         [SerializeField] protected AudioMixerSnapshot _defaultSnapshot;
 
-        public bool EnableVolumes => _enableVolumes;
-        [SerializeField] protected bool _enableVolumes = true;
+        public bool SnapshotVolumes => _snapshotVolumes;
+        [SerializeField] protected bool _snapshotVolumes = true;
+
 
         public IReadOnlyList<KnotAudioGroup> AudioGroups => _audioGroups ?? (_audioGroups = new List<KnotAudioGroup>());
         [SerializeField, Space] protected List<KnotAudioGroup> _audioGroups;

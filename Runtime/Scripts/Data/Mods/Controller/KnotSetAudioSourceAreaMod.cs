@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Knot.Audio
 {
     [Serializable]
-    [KnotTypeInfo(displayName: "Set AudioSource Area")]
+    [KnotTypeInfo(displayName: "Set AudioSource Area", menuCustomName: "Controller/Set AudioSource Area", order: 1000)]
     public class KnotSetAudioSourceAreaMod : IKnotControllerMod
     {
         public KnotAudioSourceArea Area
@@ -24,7 +24,7 @@ namespace Knot.Audio
         }
 
 
-        public void Setup(KnotAudioController controller)
+        public void Setup(KnotAudioControllerBase controller)
         {
             if (Area == null)
                 return;

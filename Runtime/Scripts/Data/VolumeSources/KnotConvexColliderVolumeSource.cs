@@ -36,21 +36,18 @@ namespace Knot.Audio
                 outDst = d;
             
             var weight = Mathf.Approximately(outDst, 0) ? 1 : Mathf.Clamp01((maxDistance - outDst) / maxDistance);
+
             return (closestPoint, weight);
         }
 
         public Bounds CalculateWorldBounds(float maxExpandDistance)
         {
-            var bounds = new Bounds
-            {
-                min = Sample(-Vector3.one * 999999).closestPoint,
-                max = Sample(Vector3.one * 999999).closestPoint
-            };
-            bounds.Encapsulate(Sample(-Vector3.one * 999999).closestPoint);
-            bounds.Encapsulate(Sample(Vector3.one * 999999).closestPoint);
-            bounds.Expand(maxExpandDistance);
+            if (Collider == null)
+                return default;
 
-            return bounds;
+            var b = Collider.bounds;
+            b.Expand(maxExpandDistance * 2);
+            return b;
         }
 
         public void DrawGizmos()
@@ -58,7 +55,7 @@ namespace Knot.Audio
             if (Collider == null || !Collider.enabled || Collider is MeshCollider { convex: false })
                 return;
 
-            Gizmos.color = new Color(1, 1, 0, 0.2f);
+            Gizmos.color = KnotAudio.DefaultGizmosColor;
             if (Collider is SphereCollider sc)
             {
                 var scale = Mathf.Max(sc.transform.lossyScale.x, sc.transform.lossyScale.y, sc.transform.lossyScale.z);

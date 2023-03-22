@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Knot.Audio
 {
     [Serializable]
-    [KnotTypeInfo("Set Position")]
+    [KnotTypeInfo("Set Position", menuCustomName: "Controller/Set Position", order: 1000)]
     public class KnotSetPositionMod : IKnotControllerMod
     {
         public Vector3 Position
@@ -32,7 +32,7 @@ namespace Knot.Audio
         }
 
 
-        public void Setup(KnotAudioController controller)
+        public void Setup(KnotAudioControllerBase controller)
         {
             if (Space == Space.Self)
                 controller.transform.localPosition = Position;

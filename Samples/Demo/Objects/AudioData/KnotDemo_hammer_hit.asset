@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4a9d6fe61e8a9547bc3f3ca1d49984b, type: 3}
+  m_Name: KnotDemo_hammer_hit
+  m_EditorClassIdentifier: 
+  _audioData:
+    _audioClip: {fileID: 8300000, guid: 5e987a4128b848d4696ccc9f4564a977, type: 3}
+    _groupName: World
+    _mods:
+    - id: 0
+    - id: 1
+    - id: 2
+  references:
+    version: 1
+    00000000:
+      type: {class: KnotVolumeRangeMod, ns: Knot.Audio, asm: Knot.Audio}
+      data:
+        _min: 0.3
+        _max: 0.4
+    00000001:
+      type: {class: KnotPitchRangeMod, ns: Knot.Audio, asm: Knot.Audio}
+      data:
+        _min: 1
+        _max: 1.1
+    00000002:
+      type: {class: Knot3DSoundSettingsMod, ns: Knot.Audio, asm: Knot.Audio}
+      data:
+        _dopplerLevel: 0
+        _spread: 0
+        _minDistance: 1
+        _maxDistance: 15
+        _rolloffMode: 1

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Knot.Audio
 {
-    public abstract class KnotAreaObject : MonoBehaviour
+    public abstract class KnotAreaObject : KnotTrackedMonoBehaviour<KnotAreaObject>
     {
         public List<IKnotVolumeSource> VolumeSources =>
             _volumeSources ?? (_volumeSources = new List<IKnotVolumeSource>());
@@ -74,7 +74,5 @@ namespace Knot.Audio
                 Weight = weight;
             }
         }
-        
-        
     }
 }

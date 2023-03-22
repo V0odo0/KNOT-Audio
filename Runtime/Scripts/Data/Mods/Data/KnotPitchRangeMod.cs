@@ -34,7 +34,7 @@ namespace Knot.Audio
 
         public float Sample() => UnityEngine.Random.Range(Min, Max);
 
-        public void Setup(KnotAudioController controller)
+        public void Setup(KnotAudioControllerBase controller)
         {
             if (controller == null)
                 return;

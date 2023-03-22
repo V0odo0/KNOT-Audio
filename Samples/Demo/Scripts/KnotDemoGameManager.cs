@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,7 +19,6 @@ namespace Knot.Audio.Demo
         void Awake()
         {
             _playerController.transform.position = _playerStartPos.position;
-            KnotAudio.AudioListener = _playerController.transform;
         }
 
         void Update()

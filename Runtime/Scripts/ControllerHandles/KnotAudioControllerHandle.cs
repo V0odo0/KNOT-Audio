@@ -2,12 +2,12 @@ namespace Knot.Audio
 {
     public partial struct KnotAudioControllerHandle
     {
-        public readonly KnotAudioController Controller;
+        public readonly KnotAudioControllerBase Controller;
 
         public bool IsValid => Controller != null;
 
 
-        public KnotAudioControllerHandle(KnotAudioController controller)
+        public KnotAudioControllerHandle(KnotAudioControllerBase controller)
         {
             Controller = controller;
         }

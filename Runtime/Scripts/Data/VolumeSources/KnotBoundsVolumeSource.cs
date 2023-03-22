@@ -54,16 +54,26 @@ namespace Knot.Audio
 
         public Bounds CalculateWorldBounds(float maxExpandDistance)
         {
-            var bounds = new Bounds
-            {
-                min = Bounds.Min(b => b.min),
-                max = Bounds.Max(b => b.max)
-            };
-            foreach (var b in Bounds)
-                bounds.Encapsulate(b);
+            if (Bounds.Count == 0)
+                return default;
 
-            bounds.Expand(maxExpandDistance);
-            return bounds;
+            var rootBound = Bounds[0];
+            if (Pivot != null)
+                rootBound.center += Pivot.position;
+
+            if (Bounds.Count > 1)
+            {
+                for (int i = 1; i < Bounds.Count; i++)
+                {
+                    var b = Bounds[i];
+                    if (Pivot != null)
+                        b.center += Pivot.position;
+                    rootBound.Encapsulate(b);
+                }
+            }
+
+            rootBound.Expand(maxExpandDistance * 2);
+            return rootBound;
         }
 
         public void DrawGizmos()
@@ -71,7 +81,7 @@ namespace Knot.Audio
             if (Bounds.Count == 0)
                 return;
 
-            Gizmos.color = new Color(1, 1, 0, 0.2f);
+            Gizmos.color = KnotAudio.DefaultGizmosColor;
             foreach (var b in Bounds)
             {
                 var localBound = Pivot == null ? b : new Bounds(Pivot.TransformPoint(b.center), b.size);

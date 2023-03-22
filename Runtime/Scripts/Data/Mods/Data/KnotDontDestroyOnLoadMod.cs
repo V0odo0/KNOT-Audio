@@ -8,7 +8,7 @@ namespace Knot.Audio
     [KnotTypeInfo(displayName: "Dont Destroy On Load")]
     public class KnotDontDestroyOnLoadMod : IKnotAudioDataMod, IKnotAudioGroupMod
     {
-        public void Setup(KnotAudioController controller)
+        public void Setup(KnotAudioControllerBase controller)
         {
             if (KnotAudio.Manager == null)
                 Object.DontDestroyOnLoad(controller);
