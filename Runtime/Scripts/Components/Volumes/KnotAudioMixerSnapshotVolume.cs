@@ -3,7 +3,7 @@ using UnityEngine.Audio;
 
 namespace Knot.Audio
 {
-    [AddComponentMenu(KnotAudio.CoreName + "/AudioMixer Snapshot Volume", 1000)]
+    [AddComponentMenu("Audio/" + KnotAudio.CoreName + "/Audio Mixer Snapshot Volume", 1000)]
     public class KnotAudioMixerSnapshotVolume : KnotTrackedVolumeObject<KnotAudioMixerSnapshotVolume>
     {
         public AudioMixerSnapshot Snapshot

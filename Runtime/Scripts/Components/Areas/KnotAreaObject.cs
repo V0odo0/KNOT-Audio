@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Knot.Audio.Attributes;
 using UnityEngine;

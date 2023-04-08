@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Knot.Audio
 {
     [DisallowMultipleComponent]
-    [AddComponentMenu(KnotAudio.CoreName + "/AudioSource Area", 1000)]
+    [AddComponentMenu("Audio/" + KnotAudio.CoreName + "/Audio Source Area", 1000)]
     public class KnotAudioSourceArea : KnotAreaObject
     {
         public List<AudioSource> AudioSources => _audioSources ?? (_audioSources = new List<AudioSource>());
@@ -98,8 +98,6 @@ namespace Knot.Audio
         {
             public readonly float BaseSpread;
 
-
-            public AudioSourceSettings(float baseSpread) { }
 
             public AudioSourceSettings(AudioSource audioSource)
             {

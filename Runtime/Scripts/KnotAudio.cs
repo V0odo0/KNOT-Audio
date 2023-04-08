@@ -4,7 +4,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
 using Object = UnityEngine.Object;
-using static Knot.Audio.KnotAudioMixerParametersVolume;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -137,19 +136,19 @@ namespace Knot.Audio
             return manager;
         }
 
-        internal static void Log(string message, LogType type)
+        internal static void Log(object message, LogType type, Object context = null)
         {
             message = $"{CoreName}: {message}";
             switch (type)
             {
                 default:
-                    Debug.Log(message);
+                    Debug.Log(message, context);
                     break;
                 case LogType.Error:
-                    Debug.LogError(message);
+                    Debug.LogError(message, context);
                     break;
                 case LogType.Warning:
-                    Debug.LogWarning(message);
+                    Debug.LogWarning(message, context);
                     break;
             }
         }

@@ -1,6 +1,5 @@
 using System;
 using Knot.Audio.Attributes;
-using UnityEngine;
 
 namespace Knot.Audio
 {

@@ -3,7 +3,6 @@
 using System.Collections.Generic;
 using Knot.Audio.Attributes;
 using UnityEngine;
-using UnityEngine.Audio;
 
 namespace Knot.Audio
 {

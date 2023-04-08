@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Knot.Audio.Attributes;
 using UnityEngine;
 
 namespace Knot.Audio
 {
-    [AddComponentMenu(KnotAudio.CoreName + "/Audio Player", 0)]
+    [AddComponentMenu("Audio/" + KnotAudio.CoreName + "/Audio Player", 0)]
     public class KnotAudioPlayer : KnotTrackedMonoBehaviour<KnotAudioPlayer>
     {
         public virtual IKnotAudioDataProvider AudioDataProvider

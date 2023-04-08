@@ -1,12 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Knot.Audio
 {
     [DisallowMultipleComponent]
-    [AddComponentMenu(KnotAudio.CoreName + "/ReverbZone Area", 1000)]
-    public class KnotReverbZoneArea : KnotAreaObject
+    [AddComponentMenu("Audio/" + KnotAudio.CoreName + "/Audio Reverb Zone Area", 1000)]
+    public class KnotAudioReverbZoneArea : KnotAreaObject
     {
         public List<AudioReverbZone> ReverbZones => _reverbZones ?? (_reverbZones = new List<AudioReverbZone>());
         [SerializeField] private List<AudioReverbZone> _reverbZones;
