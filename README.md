@@ -1,5 +1,3 @@
-# EARLY STAGE OF DEVELOPMENT. DO NOT IMPLEMENT YET!
-
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/V0odo0/Knot-Audio?label=release)
 ![Unity version](https://img.shields.io/badge/Unity-2020.3%2B-blue)
 ![Dependencies](https://img.shields.io/badge/dependencies-none-green)
