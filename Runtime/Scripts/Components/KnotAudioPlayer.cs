@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Knot.Audio
 {
-    [AddComponentMenu("Audio/" + KnotAudio.CoreName + "/Audio Player", 0)]
+    [AddComponentMenu(KnotAudio.CorePath + "Audio Player", 0)]
     public class KnotAudioPlayer : KnotTrackedMonoBehaviour<KnotAudioPlayer>
     {
         public virtual IKnotAudioDataProvider AudioDataProvider
@@ -48,7 +48,7 @@ namespace Knot.Audio
         {
             AudioDataProvider = new KnotInstanceAudioDataProvider();
             ControllerMods.Add(new KnotSetParentMod(transform));
-            PlayOnAwake = true;
+            PlayOnAwake = false;
         }
 
         public virtual void Play() => PlayGetHandle();

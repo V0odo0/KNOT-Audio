@@ -7,7 +7,7 @@ namespace Knot.Audio
 {
     [RequireComponent(typeof(AudioSource))]
     [DisallowMultipleComponent]
-    [AddComponentMenu("Audio/" + KnotAudio.CoreName + "/Audio Controller", 1)]
+    [AddComponentMenu(KnotAudio.CorePath + "Audio Controller", 1)]
     public class KnotAudioController : KnotAudioControllerBase
     {
         public override float MaxVolume

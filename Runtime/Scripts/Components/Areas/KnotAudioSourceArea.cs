@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Knot.Audio
 {
     [DisallowMultipleComponent]
-    [AddComponentMenu("Audio/" + KnotAudio.CoreName + "/Audio Source Area", 1000)]
+    [AddComponentMenu(KnotAudio.CorePath + "Audio Source Area", 1000)]
     public class KnotAudioSourceArea : KnotAreaObject
     {
         public List<AudioSource> AudioSources => _audioSources ?? (_audioSources = new List<AudioSource>());

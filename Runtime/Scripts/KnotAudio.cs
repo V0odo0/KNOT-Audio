@@ -14,6 +14,8 @@ namespace Knot.Audio
     public static class KnotAudio
     {
         internal const string CoreName = "KNOT Audio";
+        internal const string CorePath = "KNOT/Audio/";
+
         internal static Color DefaultGizmosColor { get; } = new Color(1, 1, 0, 0.33f);
 
         internal static KnotAudioProjectSettings ProjectSettings =>

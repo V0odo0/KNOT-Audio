@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Knot.Audio
 {
-    [AddComponentMenu("Audio/" + KnotAudio.CoreName + "/Audio Mixer Parameters Volume", 1000)]
+    [AddComponentMenu(KnotAudio.CorePath + "Audio Mixer Parameters Volume", 1000)]
     public class KnotAudioMixerParametersVolume : KnotTrackedVolumeObject<KnotAudioMixerParametersVolume>
     {
         public int Priority

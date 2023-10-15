@@ -4,7 +4,7 @@ using UnityEngine.Audio;
 
 namespace Knot.Audio
 {
-    [CreateAssetMenu(fileName = "KnotAudioSettingsProfile", menuName = KnotAudio.CoreName + "/Audio Settings Profile", order = -100)]
+    [CreateAssetMenu(fileName = "KnotAudioSettingsProfile", menuName = KnotAudio.CorePath + "Audio Settings Profile", order = -100)]
     public class KnotAudioSettingsProfile : ScriptableObject
     {
         public AudioMixer DefaultAudioMixer => _defaultAudioMixer;

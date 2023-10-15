@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Knot.Audio
 {
     [DisallowMultipleComponent]
-    [AddComponentMenu("Audio/" + KnotAudio.CoreName + "/Audio Reverb Zone Area", 1000)]
+    [AddComponentMenu(KnotAudio.CorePath + "Audio Reverb Zone Area", 1000)]
     public class KnotAudioReverbZoneArea : KnotAreaObject
     {
         public List<AudioReverbZone> ReverbZones => _reverbZones ?? (_reverbZones = new List<AudioReverbZone>());

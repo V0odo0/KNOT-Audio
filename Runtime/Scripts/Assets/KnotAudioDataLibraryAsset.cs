@@ -9,7 +9,7 @@ using static Knot.Audio.KnotAudioDataLibraryAsset;
 namespace Knot.Audio
 {
     [KnotTypeInfo("Audio Data Library")]
-    [CreateAssetMenu(fileName = "KnotAudioDataLibrary", menuName = KnotAudio.CoreName + "/Audio Data Library", order = -100)]
+    [CreateAssetMenu(fileName = "KnotAudioDataLibrary", menuName = KnotAudio.CorePath + "Audio Data Library", order = -100)]
     public class KnotAudioDataLibraryAsset : ScriptableObject, IEnumerable<AudioDataLibraryEntry>
     {
         public List<AudioDataLibraryEntry> Entries => 
