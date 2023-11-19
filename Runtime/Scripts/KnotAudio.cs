@@ -26,13 +26,13 @@ namespace Knot.Audio
         {
             get
             {
-                if (Manager == null || Manager.OverrideSettings == null)
+                if (_manager == null || _manager.OverrideSettings == null)
                     return ProjectSettings.CustomSettings == null ? _projectSettings : _projectSettings.CustomSettings;
                 return Manager.OverrideSettings;
             }
             set
             {
-                if (Manager == null || Manager.OverrideSettings == value)
+                if (_manager == null || _manager.OverrideSettings == value)
                     return;
 
                 var prev = Manager.OverrideSettings;
@@ -69,17 +69,14 @@ namespace Knot.Audio
         }
         private static Transform _audioListener;
 
-        internal static KnotAudioManager Manager => _manager;
+        internal static KnotAudioManager Manager => _manager == null ? _manager = GetAudioManager() : _manager;
         private static KnotAudioManager _manager;
         
         
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void Init()
         {
-            if (Settings == null)
-                return;
-
-            _manager = GetAudioManager();
+            
         }
 
         static KnotAudioProjectSettings LoadProjectSettings()
@@ -131,9 +128,10 @@ namespace Knot.Audio
 
         static KnotAudioManager GetAudioManager()
         {
-            var manager = new GameObject(nameof(KnotAudioManager)).AddComponent<KnotAudioManager>();
+            var managerObj = new GameObject(nameof(KnotAudioManager));
+            var manager = managerObj.AddComponent<KnotAudioManager>();
             manager.SetSettings(Settings);
-            Object.DontDestroyOnLoad(manager);
+            Object.DontDestroyOnLoad(managerObj);
 
             return manager;
         }
@@ -257,7 +255,7 @@ namespace Knot.Audio
         }
 
 
-        internal class KnotAudioManager : MonoBehaviour
+        public class KnotAudioManager : MonoBehaviour
         {
             public KnotAudioSettingsProfile OverrideSettings { get; set; }
             public Transform OverrideAudioListener { get; set; }
@@ -293,11 +291,6 @@ namespace Knot.Audio
             {
                 UpdateSnapshotVolumes();
                 UpdateMixerParameterVolumes();
-            }
-
-            void OnDestroy()
-            {
-                _manager = null;
             }
 
 

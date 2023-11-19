@@ -64,7 +64,7 @@ namespace Knot.Audio
         {
             if (variantId < 0 || AudioDataProvider == null)
                 return default;
-            
+
             if (AudioDataProvider is KnotAssetAudioDataVariantProvider assetVariant && variantId < assetVariant.Variants.Count)
                 return assetVariant.Variants[variantId]?.AudioData?.Play(PlayMode, ControllerMods.ToArray()) ?? default;
             if (AudioDataProvider is KnotLibraryEntryVariantProvider libraryVariant && variantId < libraryVariant.Variants.Count)

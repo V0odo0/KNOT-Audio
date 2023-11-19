@@ -241,6 +241,78 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1565023750452416587}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &44851258
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 44851259}
+  - component: {fileID: 44851260}
+  m_Layer: 0
+  m_Name: EarthEdgeAudioPlayer_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &44851259
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 44851258}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.32543468, y: 1.5155811, z: 12.92967}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1786557309}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &44851260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 44851258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c1ab7a448008f4799334bf364d51d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _audioDataProvider:
+    id: 0
+  _controllerMods:
+  - id: 1
+  _playOnAwake: 1
+  _playMode: 1
+  references:
+    version: 1
+    00000000:
+      type: {class: KnotInstanceAudioDataProvider, ns: Knot.Audio, asm: Knot.Audio}
+      data:
+        _audioClip: {fileID: 8300000, guid: 1b6ceb4da42786f4da018c17d54c14e8, type: 3}
+        _groupName: World
+        _mods:
+        - id: 2
+        - id: 3
+    00000001:
+      type: {class: KnotSetParentMod, ns: Knot.Audio, asm: Knot.Audio}
+      data:
+        _parent: {fileID: 44851259}
+    00000002:
+      type: {class: KnotAudioMixerGroupMod, ns: Knot.Audio, asm: Knot.Audio}
+      data:
+        _group: {fileID: 8352728884881155958, guid: 4ea1ecdc487c2e742ac720de0aa0ffc0,
+          type: 2}
+    00000003:
+      type: {class: KnotSpatialBlendMod, ns: Knot.Audio, asm: Knot.Audio}
+      data:
+        _value: 0
 --- !u!1 &49211298
 GameObject:
   m_ObjectHideFlags: 0
@@ -2523,6 +2595,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!64 &436934870
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2782,6 +2855,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!136 &462180912
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9703,6 +9777,7 @@ Transform:
   m_Children:
   - {fileID: 1496668416}
   - {fileID: 1769030208}
+  - {fileID: 44851259}
   m_Father: {fileID: 1740786820}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

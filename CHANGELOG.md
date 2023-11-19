@@ -1,3 +1,7 @@
+## 0.5.2 (2023-11-20)
+
+* Fixed No Manager instance in builds
+
 ## 0.5.1 (2023-10-15)
 
 * Editor menu path generalization
