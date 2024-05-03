@@ -1,3 +1,7 @@
+## 0.5.3 (2024-05-03)
+
+* Fixed Mod List not responging to changes on Instance AudioDataProvider
+
 ## 0.5.2 (2023-11-20)
 
 * Fixed No Manager instance in builds
