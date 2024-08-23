@@ -94,7 +94,12 @@ namespace Knot.Audio.Editor
             }
 
             if (selectedType != null)
+            {
+                EditorGUI.BeginChangeCheck();
                 EditorGUI.PropertyField(position, property, label, true);
+                if (EditorGUI.EndChangeCheck())
+                    property.serializedObject.ApplyModifiedProperties();
+            }
 
             if (property.serializedObject.hasModifiedProperties)
                 property.serializedObject.ApplyModifiedProperties();

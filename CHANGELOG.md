@@ -1,3 +1,7 @@
+## 0.5.4 (2024-08-23)
+
+* Fixed KnotTypePicker'r attribute drawer not responding to property changes
+
 ## 0.5.3 (2024-05-03)
 
 * Fixed Mod List not responging to changes on Instance AudioDataProvider
