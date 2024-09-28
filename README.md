@@ -3,6 +3,8 @@
 
 ![as_icon](https://github.com/V0odo0/KNOT-Audio/blob/main/Editor/Resources/KnotAudio_icon.png)
 
+**[WebGL Showcase](https://v0odo0.github.io/KNOT-Audio-demo/)**
+
 ## Installation
 
 Add `com.knot` Scoped Registry from `https://registry.npmjs.com` in `Project/Package Manager`
