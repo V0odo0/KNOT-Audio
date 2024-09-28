@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Knot.Core;
 using UnityEngine;
 using UnityEngine.Audio;
 using Object = UnityEngine.Object;
-
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace Knot.Audio
 {
@@ -16,28 +13,19 @@ namespace Knot.Audio
         internal const string CoreName = "KNOT Audio";
         internal const string CorePath = "KNOT/Audio/";
 
-        internal static Color DefaultGizmosColor { get; } = new Color(1, 1, 0, 0.33f);
+        internal static Color DefaultGizmosColor { get; } = new (1, 1, 0, 0.33f);
 
-        internal static KnotAudioProjectSettings ProjectSettings =>
-            _projectSettings ?? (_projectSettings = LoadProjectSettings());
+        public static KnotAudioProjectSettings ProjectSettings => 
+            _projectSettings == null ? _projectSettings = Utils.GetProjectSettings<KnotAudioProjectSettings>() : _projectSettings;
         private static KnotAudioProjectSettings _projectSettings;
         
-        public static KnotAudioSettingsProfile Settings
+        public static KnotAudioSettingsProfile SettingsProfile
         {
             get
             {
                 if (_manager == null || _manager.OverrideSettings == null)
-                    return ProjectSettings.CustomSettings == null ? _projectSettings : _projectSettings.CustomSettings;
+                    return ProjectSettings.CustomProfile == null ? ProjectSettings : ProjectSettings.CustomProfile;
                 return Manager.OverrideSettings;
-            }
-            set
-            {
-                if (_manager == null || _manager.OverrideSettings == value)
-                    return;
-
-                var prev = Manager.OverrideSettings;
-                Manager.OverrideSettings = value;
-                Manager.SetSettings(value == null && prev != null ? Settings : Manager.OverrideSettings);
             }
         }
 
@@ -72,65 +60,11 @@ namespace Knot.Audio
         internal static KnotAudioManager Manager => _manager == null ? _manager = GetAudioManager() : _manager;
         private static KnotAudioManager _manager;
         
-        
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        static void Init()
-        {
-            
-        }
-
-        static KnotAudioProjectSettings LoadProjectSettings()
-        {
-            KnotAudioProjectSettings settings;
-
-#if UNITY_EDITOR
-            var allSettings =
-                AssetDatabase.FindAssets($"t:{nameof(KnotAudioProjectSettings)}").
-                    Select(AssetDatabase.GUIDToAssetPath).
-                    Select(AssetDatabase.LoadAssetAtPath<KnotAudioProjectSettings>).ToArray();
-
-            if (allSettings.Length == 0)
-            {
-                string path = $"Assets/{nameof(KnotAudioProjectSettings)}.asset";
-                settings = AssetDatabase.LoadAssetAtPath<KnotAudioProjectSettings>(path);
-
-                if (settings == null)
-                    settings = PlayerSettings.GetPreloadedAssets().OfType<KnotAudioProjectSettings>().FirstOrDefault();
-
-                if (settings == null)
-                {
-                    var instance = KnotAudioProjectSettings.CreateDefault();
-                    AssetDatabase.CreateAsset(instance, path);
-                    AssetDatabase.SaveAssets();
-                    settings = instance;
-
-                    var preloadedAssets = PlayerSettings.GetPreloadedAssets();
-                    PlayerSettings.SetPreloadedAssets(preloadedAssets.Append(settings).ToArray());
-                }
-            }
-            else
-            {
-                settings = allSettings.FirstOrDefault(p => p.name.Equals(nameof(KnotAudioProjectSettings)));
-                if (settings == null)
-                    settings = allSettings.First();
-            }
-#else
-            settings = Resources.FindObjectsOfTypeAll<KnotAudioProjectSettings>().FirstOrDefault();
-#endif
-
-            if (settings == null)
-            {
-                settings = KnotAudioProjectSettings.Empty;
-                Log("Unable to load or create Project Settings. Empty Project Settings will be assigned.", LogType.Warning);
-            }
-            return settings;
-        }
-
         static KnotAudioManager GetAudioManager()
         {
             var managerObj = new GameObject(nameof(KnotAudioManager));
             var manager = managerObj.AddComponent<KnotAudioManager>();
-            manager.SetSettings(Settings);
+            manager.SetSettings(SettingsProfile);
             Object.DontDestroyOnLoad(managerObj);
 
             return manager;
@@ -182,7 +116,7 @@ namespace Knot.Audio
                 return null;
 
             if (Manager == null)
-                return Settings.AudioGroups.FirstOrDefault(g => g.Name == groupName);
+                return SettingsProfile.AudioGroups.FirstOrDefault(g => g.Name == groupName);
 
             if (Manager.AudioGroupsOverrides.TryGetValue(groupName, out var groupOverride))
                 return groupOverride;
@@ -221,7 +155,7 @@ namespace Knot.Audio
                 return null;
 
             if (Manager == null)
-                return Settings.AudioDataLibraries.SelectMany(p => p.Entries).FirstOrDefault(g => g.Name == name)?.Provider?.AudioData;
+                return SettingsProfile.AudioDataLibraries.SelectMany(p => p.Entries).FirstOrDefault(g => g.Name == name)?.Provider?.AudioData;
 
             if (Manager.LibraryEntriesOverrides.TryGetValue(name, out var dataOverride))
                 return dataOverride;
@@ -296,7 +230,7 @@ namespace Knot.Audio
 
             void UpdateSnapshotVolumes()
             {
-                if (!Settings.SnapshotVolumes || Settings.DefaultSnapshot == null || AudioListener == null)
+                if (!SettingsProfile.SnapshotVolumes || SettingsProfile.DefaultSnapshot == null || AudioListener == null)
                     return;
 
                 _activeSnapshotVolumes.Clear();
@@ -319,16 +253,16 @@ namespace Knot.Audio
                     if (!_activeSnapshotVolumes.Contains(snapshot))
                         _snapshotWeights[snapshot] = 0;
 
-                if (!_snapshotWeights.ContainsKey(Settings.DefaultSnapshot))
-                    _snapshotWeights.Add(Settings.DefaultSnapshot, 1);
-                _snapshotWeights[Settings.DefaultSnapshot] = 1 - _snapshotWeights.Values.Max();
+                if (!_snapshotWeights.ContainsKey(SettingsProfile.DefaultSnapshot))
+                    _snapshotWeights.Add(SettingsProfile.DefaultSnapshot, 1);
+                _snapshotWeights[SettingsProfile.DefaultSnapshot] = 1 - _snapshotWeights.Values.Max();
 
-                Settings.DefaultSnapshot.audioMixer.TransitionToSnapshots(_snapshotWeights.Keys.ToArray(), _snapshotWeights.Values.ToArray(), 0);
+                SettingsProfile.DefaultSnapshot.audioMixer.TransitionToSnapshots(_snapshotWeights.Keys.ToArray(), _snapshotWeights.Values.ToArray(), 0);
             }
 
             void UpdateMixerParameterVolumes()
             {
-                if (!Settings.AudioMixerParameterVolumes || Settings.DefaultAudioMixer == null || AudioListener == null)
+                if (!SettingsProfile.AudioMixerParameterVolumes || SettingsProfile.DefaultAudioMixer == null || AudioListener == null)
                     return;
 
                 _curActiveMixerParameters.Clear();
@@ -342,7 +276,7 @@ namespace Knot.Audio
                     float weight = vol.GetWeight(AudioListener.transform.position);
                     foreach (var parameter in vol.Parameters)
                     {
-                        if (Settings.DefaultAudioMixer.GetFloat(parameter.Name, out var currentValue))
+                        if (SettingsProfile.DefaultAudioMixer.GetFloat(parameter.Name, out var currentValue))
                         {
                             if (!_mixerDefaultParams.ContainsKey(parameter.Name))
                             {
@@ -354,7 +288,7 @@ namespace Knot.Audio
                                 parameter.TargetValue, weight);
                             _mixerBlendParams[parameter.Name] = blendValue;
 
-                            Settings.DefaultAudioMixer.SetFloat(parameter.Name, blendValue);
+                            SettingsProfile.DefaultAudioMixer.SetFloat(parameter.Name, blendValue);
                             _curActiveMixerParameters.Add(parameter.Name);
                         }
                     }
@@ -364,7 +298,7 @@ namespace Knot.Audio
                 {
                     foreach (var p in _lastActiveMixerParameters.Where(s => !_curActiveMixerParameters.Contains(s)))
                         if (_mixerBlendParams.TryGetValue(p, out var val))
-                            Settings.DefaultAudioMixer.SetFloat(p, val);
+                            SettingsProfile.DefaultAudioMixer.SetFloat(p, val);
                 }
 
                 _lastActiveMixerParameters.Clear();

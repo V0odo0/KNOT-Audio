@@ -1,14 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 namespace Knot.Audio.Editor
 {
     [CustomPreview(typeof(KnotAudioDataAsset))]
-    public class KnotAudioDataAssetPreview : ObjectPreview
+    internal class KnotAudioDataAssetPreview : ObjectPreview
     {
         public override bool HasPreviewGUI()
         {
@@ -40,7 +36,8 @@ namespace Knot.Audio.Editor
             if (dataAsset == null || dataAsset.AudioData.AudioClip == null)
                 return;
 
-            KnotEditorUtils.PlayPreviewClip(dataAsset.AudioData.AudioClip, 10000);
+            EditorUtils.StopAllPreviewClips();
+            EditorUtils.PlayPreviewClip(dataAsset.AudioData.AudioClip, 10000);
         }
     }
 }

@@ -2,6 +2,8 @@
     "name": "Knot.Audio.Editor",
     "rootNamespace": "Knot.Audio.Editor",
     "references": [
+        "GUID:af414662448468948b4193c4d3d002ee",
+        "GUID:c4fabd72c3d2eef41b05bea728c3b9c5",
         "GUID:c9a232f8a64b0164eb47c3af6073d2a4"
     ],
     "includePlatforms": [

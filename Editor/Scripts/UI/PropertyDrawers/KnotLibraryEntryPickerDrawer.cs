@@ -11,7 +11,7 @@ namespace Knot.Audio.Editor
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (KnotAudio.Settings == null || property.propertyType != SerializedPropertyType.String)
+            if (KnotAudio.SettingsProfile == null || property.propertyType != SerializedPropertyType.String)
             {
                 base.OnGUI(position, property, label);
                 return;

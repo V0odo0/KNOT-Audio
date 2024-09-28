@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Knot.Audio.Attributes;
+using Knot.Core;
 using UnityEngine;
 using static Knot.Audio.KnotAudioDataLibraryAsset;
 
@@ -25,7 +25,7 @@ namespace Knot.Audio
         protected virtual void OnValidate()
         {
 #if UNITY_EDITOR
-            if (KnotAudio.Settings != null && KnotAudio.Settings.AudioDataLibraries.Contains(this))
+            if (KnotAudio.SettingsProfile != null && KnotAudio.SettingsProfile.AudioDataLibraries.Contains(this))
                 KnotAudioSettingsProfile.RebuildCachedLibraryEntries();
 #endif
         }

@@ -1,5 +1,5 @@
 using System;
-using Knot.Audio.Attributes;
+using Knot.Core;
 
 namespace Knot.Audio
 {

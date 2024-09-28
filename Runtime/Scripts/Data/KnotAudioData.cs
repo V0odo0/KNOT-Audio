@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Knot.Audio.Attributes;
+using Knot.Core;
 using UnityEngine;
 using UnityEngine.Serialization;
 

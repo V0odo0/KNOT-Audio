@@ -1,6 +1,6 @@
 {
   "name": "com.knot.audio",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "author": "V0odo0",
   "displayName": "KNOT Audio",
   "unity": "2020.3",
@@ -9,6 +9,9 @@
     "audio",
     "sound"
 	],
+  "dependencies": {
+	"com.knot.core": "1.0.3"
+  },
   "category": "Audio",
   "documentationUrl": "https://github.com/V0odo0/KNOT-Audio",
   "changelogUrl": "https://github.com/V0odo0/KNOT-Audio/blob/main/CHANGELOG.md",

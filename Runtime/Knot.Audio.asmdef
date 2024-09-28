@@ -1,7 +1,9 @@
 {
     "name": "Knot.Audio",
     "rootNamespace": "Knot.Audio",
-    "references": [],
+    "references": [
+        "GUID:af414662448468948b4193c4d3d002ee"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

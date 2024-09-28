@@ -21,7 +21,14 @@ namespace Knot.Audio
 
 
         public IReadOnlyList<KnotAudioGroup> AudioGroups => _audioGroups ?? (_audioGroups = new List<KnotAudioGroup>());
-        [SerializeField, Space] protected List<KnotAudioGroup> _audioGroups;
+        [SerializeField, Space] protected List<KnotAudioGroup> _audioGroups = new List<KnotAudioGroup>()
+        {
+            new ("UI",
+                new KnotDontDestroyOnLoadMod(),
+                new KnotSpatialBlendMod(0),
+                new KnotBypassConfigMod(true, true, true),
+                new KnotAudioListenerSetupMod(true, false))
+        };
 
         public IReadOnlyList<KnotAudioDataLibraryAsset> AudioDataLibraries =>
             _audioDataLibraries ?? (_audioDataLibraries = new List<KnotAudioDataLibraryAsset>());
@@ -31,7 +38,7 @@ namespace Knot.Audio
         protected virtual void OnValidate()
         {
 #if UNITY_EDITOR
-            if (KnotAudio.Settings == this)
+            if (KnotAudio.SettingsProfile == this)
             {
                 RebuildCachedAudioGroupNames();
                 RebuildCachedLibraryEntries();
@@ -70,10 +77,10 @@ namespace Knot.Audio
                 _cachedAudioGroupNames = new List<string>();
             else _cachedAudioGroupNames.Clear();
 
-            if (KnotAudio.Settings == null)
+            if (KnotAudio.SettingsProfile == null)
                 return;
             
-            foreach (var audioGroup in KnotAudio.Settings.AudioGroups)
+            foreach (var audioGroup in KnotAudio.SettingsProfile.AudioGroups)
             {
                 if (string.IsNullOrEmpty(audioGroup.Name) || _cachedAudioGroupNames.Contains(audioGroup.Name))
                     continue;
@@ -88,10 +95,10 @@ namespace Knot.Audio
                 _cachedLibraryEntryNames = new List<string>();
             else _cachedLibraryEntryNames.Clear();
 
-            if (KnotAudio.Settings == null)
+            if (KnotAudio.SettingsProfile == null)
                 return;
 
-            foreach (var library in KnotAudio.Settings.AudioDataLibraries)
+            foreach (var library in KnotAudio.SettingsProfile.AudioDataLibraries)
             {
                 if (library == null)
                     continue;

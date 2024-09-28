@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Knot.Audio.Attributes;
+using Knot.Core;
 using UnityEngine;
 
 namespace Knot.Audio
