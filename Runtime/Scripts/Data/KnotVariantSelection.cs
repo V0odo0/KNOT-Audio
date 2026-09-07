@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Knot.Audio
 {
+	[Serializable]
     public abstract class KnotVariantSelection<T> where T : class
     {
         protected static List<T> VariantsTemp { get; } = new List<T>();
