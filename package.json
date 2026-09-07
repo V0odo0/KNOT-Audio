@@ -1,10 +1,14 @@
 {
   "name": "com.knot.audio",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "author": "V0odo0",
   "displayName": "KNOT Audio",
   "unity": "2021.3",
   "description": "Lightweight, scalable and extensible audio manager for Unity.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/V0odo0/KNOT-Audio.git"
+  },
   "keywords": [
     "audio",
     "sound"
