@@ -5,15 +5,15 @@ using UnityEngine;
 namespace Knot.Audio
 {
     [Serializable]
-    [KnotTypeInfo("Volume Over Velocity", menuCustomName: "Behaviour/Volume Over Velocity", order: 1000)]
-    public class KnotVolumeOverVelocityMod : IKnotPlaybackBehaviourMod
+    [KnotTypeInfo("Pitch Over Velocity", menuCustomName: "Behaviour/Pitch Over Velocity", order: 1000)]
+    public class KnotPitchOverVelocityMod : IKnotPlaybackBehaviourMod
     {
-        public AnimationCurve VolumeOverVelocityCurve
+        public AnimationCurve PitchOverVelocityCurve
         {
-            get => _volumeOverVelocityCurve;
-            set => _volumeOverVelocityCurve = value;
+            get => _pitchOverVelocityCurve;
+            set => _pitchOverVelocityCurve = value;
         }
-        [SerializeField] private AnimationCurve _volumeOverVelocityCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+        [SerializeField] private AnimationCurve _pitchOverVelocityCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
         public float SmoothStep
         {
@@ -26,11 +26,11 @@ namespace Knot.Audio
         private Vector3 _lastPos;
 
 
-        public KnotVolumeOverVelocityMod() { }
+        public KnotPitchOverVelocityMod() { }
 
-        public KnotVolumeOverVelocityMod(AnimationCurve volumeOverVelocityCurve)
+        public KnotPitchOverVelocityMod(AnimationCurve pitchOverVelocityCurve)
         {
-            _volumeOverVelocityCurve = volumeOverVelocityCurve;
+            _pitchOverVelocityCurve = pitchOverVelocityCurve;
         }
 
 
@@ -38,7 +38,7 @@ namespace Knot.Audio
 
         public IKnotPlaybackBehaviourMod GetInstance(KnotAudioControllerBase controller)
         {
-            return new KnotVolumeOverVelocityMod(VolumeOverVelocityCurve)
+            return new KnotPitchOverVelocityMod(PitchOverVelocityCurve)
             {
                 SmoothStep = SmoothStep
             };
@@ -46,7 +46,7 @@ namespace Knot.Audio
 
         public void OnBehaviourStateEvent(KnotPlaybackBehaviourEvent behaviourEvent, KnotAudioControllerBase controller)
         {
-            if (VolumeOverVelocityCurve == null)
+            if (PitchOverVelocityCurve == null)
                 return;
 
             switch (behaviourEvent)
@@ -54,10 +54,9 @@ namespace Knot.Audio
                 case KnotPlaybackBehaviourEvent.Attach:
                 case KnotPlaybackBehaviourEvent.Update:
                     float velocity = (controller.transform.position - _lastPos).magnitude;
-                    var volume = VolumeOverVelocityCurve.Evaluate(velocity);
-                    var targetVolume = Mathf.Clamp(volume, 0, controller.MaxVolume);
+                    var targetPitch = PitchOverVelocityCurve.Evaluate(velocity);
 
-                    controller.AudioSource.volume = Mathf.Lerp(controller.AudioSource.volume, targetVolume, Time.deltaTime * SmoothStep);
+                    controller.AudioSource.pitch = Mathf.Lerp(controller.AudioSource.pitch, targetPitch, Time.deltaTime * SmoothStep);
 
                     _lastPos = controller.transform.position;
                     break;

@@ -11,7 +11,7 @@ namespace Knot.Audio
         public void Setup(KnotAudioControllerBase controller)
         {
             if (KnotAudio.Manager == null)
-                Object.DontDestroyOnLoad(controller);
+                Object.DontDestroyOnLoad(controller.gameObject);
             else controller.transform.SetParent(KnotAudio.Manager.transform);
         }
     }

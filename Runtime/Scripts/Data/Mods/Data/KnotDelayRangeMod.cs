@@ -48,7 +48,7 @@ namespace Knot.Audio
         public KnotAudioControllerHandle WithDelay(float delay)
         {
             if (Controller != null)
-                Controller.AppendMods(new KnotDelayRangeMod(delay));
+                Controller.AppendMods(new KnotDelayRangeMod(delay, delay));
 
             return this;
         }

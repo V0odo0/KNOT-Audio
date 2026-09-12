@@ -44,7 +44,7 @@ namespace Knot.Audio
             switch (behaviourEvent)
             {
                 case KnotPlaybackBehaviourEvent.Update:
-                    controller.AudioSource.volume = GetCurveTime(controller);
+                    controller.AudioSource.volume = Mathf.Clamp(GetCurveTime(controller), 0, controller.MaxVolume);
                     break;
             }
         }

@@ -29,13 +29,10 @@ namespace Knot.Audio
             if (Collider == null || !Collider.enabled || Collider is MeshCollider { convex: false })
                 return (pos, 0);
 
-            float outDst = float.PositiveInfinity;
             var closestPoint = Collider.ClosestPoint(pos);
-            var d = (closestPoint - pos).sqrMagnitude;
-            if (d < outDst)
-                outDst = d;
-            
-            var weight = Mathf.Approximately(outDst, 0) ? 1 : Mathf.Clamp01((maxDistance - outDst) / maxDistance);
+            var dst = (closestPoint - pos).magnitude;
+
+            var weight = Mathf.Approximately(dst, 0) ? 1 : Mathf.Clamp01((maxDistance - dst) / maxDistance);
 
             return (closestPoint, weight);
         }

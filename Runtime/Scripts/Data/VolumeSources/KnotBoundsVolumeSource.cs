@@ -47,7 +47,8 @@ namespace Knot.Audio
                 }
             }
 
-            var weight = Mathf.Approximately(outDst, 0) ? 1 : Mathf.Clamp01((maxDistance - outDst) / maxDistance);
+            var dst = Mathf.Sqrt(outDst);
+            var weight = Mathf.Approximately(dst, 0) ? 1 : Mathf.Clamp01((maxDistance - dst) / maxDistance);
             return (closestPoint, weight);
         }
 
@@ -83,7 +84,7 @@ namespace Knot.Audio
             Gizmos.color = KnotAudio.DefaultGizmosColor;
             foreach (var b in Bounds)
             {
-                var localBound = Pivot == null ? b : new Bounds(Pivot.TransformPoint(b.center), b.size);
+                var localBound = Pivot == null ? b : new Bounds(b.center + Pivot.position, b.size);
                 Gizmos.DrawCube(localBound.center, localBound.size);
                 Gizmos.DrawWireCube(localBound.center, localBound.size);
             }

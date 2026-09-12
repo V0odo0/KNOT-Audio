@@ -36,8 +36,14 @@ namespace Knot.Audio
             if (Camera.main == null || PanOverScreenPosCurve == null)
                 return;
 
-            var screenPos = Camera.main.WorldToViewportPoint(controller.transform.position);
-            controller.AudioSource.panStereo = PanOverScreenPosCurve.Evaluate(screenPos.x - 0.5f);
+            switch (behaviourEvent)
+            {
+                case KnotPlaybackBehaviourEvent.Attach:
+                case KnotPlaybackBehaviourEvent.Update:
+                    var screenPos = Camera.main.WorldToViewportPoint(controller.transform.position);
+                    controller.AudioSource.panStereo = PanOverScreenPosCurve.Evaluate(screenPos.x - 0.5f);
+                    break;
+            }
         }
     }
 }

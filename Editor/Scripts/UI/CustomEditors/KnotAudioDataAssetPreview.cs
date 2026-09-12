@@ -37,7 +37,7 @@ namespace Knot.Audio.Editor
                 return;
 
             EditorUtils.StopAllPreviewClips();
-            EditorUtils.PlayPreviewClip(dataAsset.AudioData.AudioClip, 10000);
+            EditorUtils.PlayPreviewClip(dataAsset.AudioData.AudioClip);
         }
     }
 }

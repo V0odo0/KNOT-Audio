@@ -24,7 +24,7 @@ namespace Knot.Audio
         }
 
 
-        public bool SampleCanPlay() => UnityEngine.Random.value >= Chance;
+        public bool SampleCanPlay() => UnityEngine.Random.value <= Chance;
 
         public void Setup(KnotAudioControllerBase controller) { }
     }
