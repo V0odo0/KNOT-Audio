@@ -19,7 +19,7 @@ namespace Knot.Audio
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public IEnumerator<AudioDataLibraryEntry> GetEnumerator() => _entries.GetEnumerator();
+        public IEnumerator<AudioDataLibraryEntry> GetEnumerator() => Entries.GetEnumerator();
 
 
         protected virtual void OnValidate()

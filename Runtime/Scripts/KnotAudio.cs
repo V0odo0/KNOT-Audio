@@ -253,9 +253,14 @@ namespace Knot.Audio
                     if (!_activeSnapshotVolumes.Contains(snapshot))
                         _snapshotWeights[snapshot] = 0;
 
+                float maxVolumeWeight = 0;
+                foreach (var w in _snapshotWeights)
+                    if (w.Key != SettingsProfile.DefaultSnapshot && w.Value > maxVolumeWeight)
+                        maxVolumeWeight = w.Value;
+
                 if (!_snapshotWeights.ContainsKey(SettingsProfile.DefaultSnapshot))
                     _snapshotWeights.Add(SettingsProfile.DefaultSnapshot, 1);
-                _snapshotWeights[SettingsProfile.DefaultSnapshot] = 1 - _snapshotWeights.Values.Max();
+                _snapshotWeights[SettingsProfile.DefaultSnapshot] = 1 - Mathf.Clamp01(maxVolumeWeight);
 
                 SettingsProfile.DefaultSnapshot.audioMixer.TransitionToSnapshots(_snapshotWeights.Keys.ToArray(), _snapshotWeights.Values.ToArray(), 0);
             }
@@ -294,12 +299,9 @@ namespace Knot.Audio
                     }
                 }
 
-                if (_curActiveMixerParameters.Count < _lastActiveMixerParameters.Count)
-                {
-                    foreach (var p in _lastActiveMixerParameters.Where(s => !_curActiveMixerParameters.Contains(s)))
-                        if (_mixerBlendParams.TryGetValue(p, out var val))
-                            SettingsProfile.DefaultAudioMixer.SetFloat(p, val);
-                }
+                foreach (var p in _lastActiveMixerParameters.Where(s => !_curActiveMixerParameters.Contains(s)))
+                    if (_mixerBlendParams.TryGetValue(p, out var val))
+                        SettingsProfile.DefaultAudioMixer.SetFloat(p, val);
 
                 _lastActiveMixerParameters.Clear();
                 _lastActiveMixerParameters.AddRange(_curActiveMixerParameters);
@@ -320,6 +322,13 @@ namespace Knot.Audio
                 var instanceLimit = allMods.OfType<KnotInstanceLimitMod>().LastOrDefault();
                 if (instanceLimit != null)
                 {
+                    foreach (var limitMod in _limitInstances.Keys.ToArray())
+                    {
+                        _limitInstances[limitMod].RemoveWhere(c => c == null);
+                        if (_limitInstances[limitMod].Count == 0 && !ReferenceEquals(limitMod, instanceLimit))
+                            _limitInstances.Remove(limitMod);
+                    }
+
                     if (_limitInstances.TryGetValue(instanceLimit, out var instances))
                     {
                         instances.RemoveWhere(c => c == null);

@@ -40,11 +40,6 @@ namespace Knot.Audio
                         closestSample = sample;
                 }
             }
-            foreach (var vs in VolumeSources)
-            {
-                if (vs == null)
-                    continue;
-            }
 
             return closestSample;
         }
@@ -55,7 +50,7 @@ namespace Knot.Audio
             foreach (var vs in VolumeSources)
             {
                 if (vs == null)
-                    return;
+                    continue;
 
                 vs.DrawGizmos();
             }

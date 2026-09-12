@@ -48,7 +48,7 @@ namespace Knot.Audio
         public KnotAudioControllerHandle WithPitch(float pitch)
         {
             if (Controller != null)
-                Controller.AppendMods(new KnotPitchRangeMod(pitch));
+                Controller.AppendMods(new KnotPitchRangeMod(pitch, pitch));
 
             return this;
         }

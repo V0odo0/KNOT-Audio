@@ -47,6 +47,7 @@ namespace Knot.Audio
         private List<IKnotPlaybackBehaviourMod> _attachedPlaybackBehaviours = new List<IKnotPlaybackBehaviourMod>();
         private float _lastPlaybackTime;
         private bool _isInstance;
+        private bool _isPaused;
 
 
         protected virtual void Start()
@@ -80,7 +81,10 @@ namespace Knot.Audio
             if (_playMode == KnotAudioPlayMode.OneShot && _isInstance)
             {
                 if (!AudioSource.isPlaying)
-                    Destroy(gameObject);
+                {
+                    if (!_isPaused)
+                        Destroy(gameObject);
+                }
                 else if (AudioSource.pitch >= 0)
                 {
                     if (AudioSource.time >= TrimEnd)
@@ -138,10 +142,14 @@ namespace Knot.Audio
         {
             foreach (var pb in playbackBehaviourMods)
             {
-                if (_attachedPlaybackBehaviours.Contains(pb))
+                if (pb == null || _attachedPlaybackBehaviours.Contains(pb))
                     continue;
 
                 var instance = pb.GetInstance(this);
+                if (instance == null)
+                    continue;
+
+                _attachedPlaybackBehaviours.Add(instance);
                 instance.OnBehaviourStateEvent(KnotPlaybackBehaviourEvent.Attach, this);
             }
         }
@@ -184,8 +192,7 @@ namespace Knot.Audio
             foreach (var mod in Mods)
                 mod?.Setup(this);
 
-            _attachedPlaybackBehaviours.AddRange(Mods.OfType<IKnotPlaybackBehaviourMod>());
-            AttachPlaybackBehaviours(_attachedPlaybackBehaviours);
+            AttachPlaybackBehaviours(Mods.OfType<IKnotPlaybackBehaviourMod>());
 
             return this;
         }
@@ -198,7 +205,8 @@ namespace Knot.Audio
 
         public override KnotAudioControllerBase Play()
         {
-            SetPlaybackTime(AudioSource.pitch > 0 ? TrimStart : TrimEnd);
+            _isPaused = false;
+            SetPlaybackTime(AudioSource.pitch >= 0 ? TrimStart : TrimEnd);
 
             if (Mathf.Approximately(PlayDelay, 0))
                 AudioSource.Play();
@@ -209,18 +217,21 @@ namespace Knot.Audio
 
         public override KnotAudioControllerBase Pause()
         {
+            _isPaused = true;
             AudioSource.Pause();
             return this;
         }
 
         public override KnotAudioControllerBase UnPause()
         {
+            _isPaused = false;
             AudioSource.UnPause();
             return this;
         }
 
         public override KnotAudioControllerBase Stop()
         {
+            _isPaused = false;
             AudioSource.Stop();
             return this;
         }

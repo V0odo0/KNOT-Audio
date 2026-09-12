@@ -54,7 +54,7 @@ namespace Knot.Audio
         public KnotAudioControllerHandle WithVolume(float volume)
         {
             if (Controller != null)
-                Controller.AppendMods(new KnotVolumeRangeMod(volume));
+                Controller.AppendMods(new KnotVolumeRangeMod(volume, volume));
 
             return this;
         }
