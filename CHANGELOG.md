@@ -1,4 +1,4 @@
-## 0.6.5 (2026-09-12)
+## 0.6.6 (2026-09-12)
 
 * Added Pitch Over Velocity, Angular Pitch Over Velocity & Angular Volume Over Velocity playback behaviour Mods
 * Fixed playback behaviour Mods not receiving Attach event and sharing runtime state between controllers (GetInstance result was discarded)
