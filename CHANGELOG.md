@@ -1,3 +1,8 @@
+## 0.6.7 (2026-10-01)
+
+* Added Distance Delay Mod: delays playback by sound travel time from the controller to the Audio Listener (configurable speed of sound)
+* Added Distant Variant Mod: swaps the clip (and optionally applies mods) for a distant Audio Data variant when the controller is farther than Min Distance from the Audio Listener
+
 ## 0.6.6 (2026-09-12)
 
 * Added Pitch Over Velocity, Angular Pitch Over Velocity & Angular Volume Over Velocity playback behaviour Mods
